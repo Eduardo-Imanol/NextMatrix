@@ -55,7 +55,12 @@ export function NotesModal({ phase, note, onNoteChange, isOpen, onOpenChange }: 
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-3xl">
+            <DialogContent 
+                className="max-w-3xl"
+                onInteractOutside={(e) => {
+                    e.preventDefault();
+                }}
+            >
                 <DialogHeader>
                     <DialogTitle>Notas: {phase.name}</DialogTitle>
                     <div className="flex justify-between items-center pt-2">
