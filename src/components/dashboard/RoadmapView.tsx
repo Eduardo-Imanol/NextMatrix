@@ -1,3 +1,4 @@
+// @/components/dashboard/RoadmapView.tsx
 "use client"
 
 import React, { useState } from 'react';
@@ -7,36 +8,33 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { roadmapData, type Phase } from "@/lib/data"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { roadmapData, type Phase, type Topic, allFlashcards, allPlaygrounds, allQuizQuestions } from "@/lib/data"
 import { Button } from '@/components/ui/button';
-import { Lightbulb, NotebookText, Swords, CheckCircle, Lock } from 'lucide-react';
+import { Lightbulb, NotebookText, Swords, CheckCircle, Lock, Hammer, Trophy } from 'lucide-react';
 import { QuizModal } from './QuizModal';
 import { FlashcardsModal } from './FlashcardsModal';
 import { NotesModal } from './NotesModal';
 import { useToast } from '@/hooks/use-toast';
+import { PlaygroundModal } from './PlaygroundModal';
 
-const defaultNotes : Record<number, string> = {
-    1: `# Mis notas sobre Fundamentos Web
+const defaultNotes : Record<string, string> = {
+    'html-fundamentals': `# Mis notas sobre Fundamentos de HTML
 
-## HTML
-Estructura es clave.
-
-- Usar etiquetas semánticas.
-- \`main\`, \`nav\`, \`article\`, etc.`,
-    2: "",
-    3: "",
-    4: "",
-    5: ""
+## Estructura
+- \`<!DOCTYPE html>\` es crucial.
+- \`<html>\` con atributo \`lang\`.
+- \`<head>\` para metadatos, \`<body>\` para contenido.`,
 };
 
 export function RoadmapView() {
   const [unlockedPhases, setUnlockedPhases] = useState<Set<number>>(() => new Set([1]));
-  const [activeModal, setActiveModal] = useState<{type: 'quiz' | 'flashcards' | 'notes' | null, phase: Phase | null}>({ type: null, phase: null });
-  const [notes, setNotes] = useState<Record<number, string>>(defaultNotes);
+  const [activeModal, setActiveModal] = useState<{type: 'quiz' | 'flashcards' | 'notes' | 'playground' | null, topic: Topic | null, phase: Phase | null}>({ type: null, topic: null, phase: null });
+  const [notes, setNotes] = useState<Record<string, string>>(defaultNotes);
   const { toast } = useToast();
 
   const handleQuizComplete = (passed: boolean, phaseNumber: number) => {
-      if (passed) {
+      if (passed && activeModal.phase) {
           const nextPhase = phaseNumber + 1;
           if (nextPhase <= roadmapData.length) {
               setUnlockedPhases(prev => new Set(prev).add(nextPhase));
@@ -46,16 +44,15 @@ export function RoadmapView() {
               });
           }
       }
-      setActiveModal({ type: null, phase: null });
+      setActiveModal({ type: null, topic: null, phase: null });
   };
 
-  const handleNoteChange = (newNote: string, phaseNumber: number) => {
-      setNotes(prev => ({ ...prev, [phaseNumber]: newNote }));
+  const handleNoteChange = (newNote: string, topicId: string) => {
+      setNotes(prev => ({ ...prev, [topicId]: newNote }));
   };
 
   const isPhaseUnlocked = (phaseNumber: number) => unlockedPhases.has(phaseNumber);
   const isPhaseCompleted = (phaseNumber: number) => unlockedPhases.has(phaseNumber + 1) || (phaseNumber === roadmapData.length && unlockedPhases.has(phaseNumber));
-
 
   return (
     <div className="space-y-8">
@@ -83,26 +80,51 @@ export function RoadmapView() {
                 </div>
               </div>
             </AccordionTrigger>
-            <AccordionContent className="space-y-6 pl-10 pt-4">
-              <p className="text-muted-foreground">{phase.description}</p>
-              <ul className="list-disc list-inside space-y-2 pl-4">
+            <AccordionContent className="space-y-6 pt-4">
+              <p className="text-muted-foreground pl-10">{phase.description}</p>
+              
+              <div className="flex flex-col gap-6 pl-10">
                 {phase.topics.map((topic) => (
-                   <li key={topic.name}>
-                     <span className="font-semibold">{topic.name}:</span> {topic.description}
-                   </li>
+                  <Card key={topic.id} className="overflow-hidden">
+                    <CardHeader>
+                      <div className="flex items-center gap-3">
+                        <topic.Icon className="h-6 w-6 text-accent"/>
+                        <CardTitle>{topic.name}</CardTitle>
+                      </div>
+                      <CardDescription className="pt-2">{topic.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-wrap gap-3">
+                      {allFlashcards.some(f => f.topicId === topic.id) && (
+                        <Button variant="outline" onClick={() => setActiveModal({ type: 'flashcards', topic, phase: null })}>
+                          <Lightbulb className="mr-2 h-4 w-4" /> Estudiar Flashcards
+                        </Button>
+                      )}
+                      {allPlaygrounds.some(p => p.topicId === topic.id) && (
+                         <Button variant="outline" onClick={() => setActiveModal({ type: 'playground', topic, phase: null })}>
+                           <Hammer className="mr-2 h-4 w-4" /> Practicar
+                         </Button>
+                      )}
+                      <Button variant="outline" onClick={() => setActiveModal({ type: 'notes', topic, phase: null })}>
+                        <NotebookText className="mr-2 h-4 w-4" /> Mis Notas
+                      </Button>
+                      {allQuizQuestions.some(q => q.topicId === topic.id) && (
+                        <Button variant="outline" onClick={() => setActiveModal({ type: 'quiz', topic, phase: null })}>
+                          <Swords className="mr-2 h-4 w-4" /> Examen del Tema
+                        </Button>
+                      )}
+                    </CardContent>
+                  </Card>
                 ))}
-              </ul>
-              <div className="mt-6 flex flex-wrap gap-4 rounded-lg border bg-muted/30 p-4">
-                  <Button onClick={() => setActiveModal({ type: 'flashcards', phase })}>
-                    <Lightbulb className="mr-2" /> Estudiar con Flashcards
-                  </Button>
-                  <Button onClick={() => setActiveModal({ type: 'notes', phase })}>
-                    <NotebookText className="mr-2" /> Mis Notas
-                  </Button>
-                  <Button onClick={() => setActiveModal({ type: 'quiz', phase })} variant="secondary" className="bg-primary/20 hover:bg-primary/30 text-primary font-semibold">
-                    <Swords className="mr-2" /> Tomar Examen
-                  </Button>
               </div>
+
+              {!isPhaseCompleted(phase.phase) && (
+                <div className="mt-8 flex flex-col items-center border-t pt-8">
+                  <p className="text-center text-muted-foreground mb-4">Completa el examen final de la fase para desbloquear la siguiente.</p>
+                  <Button onClick={() => setActiveModal({ type: 'quiz', phase, topic: null })} size="lg" className="glow-border">
+                      <Trophy className="mr-2 h-5 w-5"/> Examen Final de Fase {phase.phase}
+                  </Button>
+                </div>
+              )}
             </AccordionContent>
           </AccordionItem>
         ))}
@@ -110,22 +132,29 @@ export function RoadmapView() {
 
       <FlashcardsModal 
         isOpen={activeModal.type === 'flashcards'}
-        onOpenChange={() => setActiveModal({ type: null, phase: null })}
-        phase={activeModal.phase}
+        onOpenChange={() => setActiveModal({ type: null, topic: null, phase: null })}
+        topic={activeModal.topic}
+      />
+      
+      <PlaygroundModal
+        isOpen={activeModal.type === 'playground'}
+        onOpenChange={() => setActiveModal({ type: null, topic: null, phase: null })}
+        topic={activeModal.topic}
       />
 
       <NotesModal
         isOpen={activeModal.type === 'notes'}
-        onOpenChange={() => setActiveModal({ type: null, phase: null })}
-        phase={activeModal.phase}
-        note={activeModal.phase ? notes[activeModal.phase.phase] : ""}
-        onNoteChange={(newNote) => activeModal.phase && handleNoteChange(newNote, activeModal.phase.phase)}
+        onOpenChange={() => setActiveModal({ type: null, topic: null, phase: null })}
+        topic={activeModal.topic}
+        note={activeModal.topic ? notes[activeModal.topic.id] ?? "" : ""}
+        onNoteChange={(newNote) => activeModal.topic && handleNoteChange(newNote, activeModal.topic.id)}
       />
 
       <QuizModal 
         isOpen={activeModal.type === 'quiz'}
-        onOpenChange={() => setActiveModal({ type: null, phase: null })}
+        onOpenChange={() => setActiveModal({ type: null, topic: null, phase: null })}
         phase={activeModal.phase}
+        topic={activeModal.topic}
         onQuizComplete={(passed) => activeModal.phase && handleQuizComplete(passed, activeModal.phase.phase)}
       />
     </div>

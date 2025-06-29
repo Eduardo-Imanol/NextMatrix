@@ -1,3 +1,4 @@
+// @/components/dashboard/NotesModal.tsx
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -5,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import type { Phase } from '@/lib/data';
+import type { Topic } from '@/lib/data';
 import { Eye, Pencil } from 'lucide-react';
 
 const parseMarkdown = (text: string) => {
@@ -16,19 +17,20 @@ const parseMarkdown = (text: string) => {
     .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
     .replace(/\*(.*)\*/gim, '<em>$1</em>')
     .replace(/`(.*?)`/g, '<code class="bg-muted text-primary font-code px-1 rounded">$1</code>')
-    .replace(/^\s*[-*] (.*)/gim, '<li class="ml-4 list-disc">$1</li>')
+    .replace(/^\s*[-*] (.*)/gim, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
     .replace(/\n/g, '<br />');
 };
 
 interface NotesModalProps {
-    phase: Phase | null;
+    topic: Topic | null;
     note: string;
     onNoteChange: (newNote: string) => void;
     isOpen: boolean;
     onOpenChange: (isOpen: boolean) => void;
 }
 
-export function NotesModal({ phase, note, onNoteChange, isOpen, onOpenChange }: NotesModalProps) {
+export function NotesModal({ topic, note, onNoteChange, isOpen, onOpenChange }: NotesModalProps) {
     const [preview, setPreview] = useState('');
     const [isEditing, setIsEditing] = useState(true);
     const { toast } = useToast();
@@ -39,13 +41,9 @@ export function NotesModal({ phase, note, onNoteChange, isOpen, onOpenChange }: 
 
     useEffect(() => {
         if (isOpen) {
-            // When the modal opens for a new phase, decide the initial editing state.
-            // If the note is empty, start in edit mode. Otherwise, start in view mode.
-            // This now only depends on the modal being opened for a specific phase,
-            // and won't re-evaluate on every keystroke.
             setIsEditing(note.length === 0);
         }
-    }, [isOpen, phase]);
+    }, [isOpen, topic]);
     
     const handleSave = () => {
         toast({
@@ -55,21 +53,23 @@ export function NotesModal({ phase, note, onNoteChange, isOpen, onOpenChange }: 
         setIsEditing(false);
     }
     
-    if (!phase) return null;
+    if (!topic) return null;
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent 
                 className="max-w-3xl"
                 onInteractOutside={(e) => {
-                    e.preventDefault();
+                    if (isEditing) {
+                        e.preventDefault();
+                    }
                 }}
             >
                 <DialogHeader>
-                    <DialogTitle>Notas: {phase.name}</DialogTitle>
+                    <DialogTitle>Notas: {topic.name}</DialogTitle>
                     <div className="flex justify-between items-center pt-2">
                         <DialogDescription>
-                            Tus apuntes personales para esta fase.
+                           Tus apuntes personales para este tema.
                         </DialogDescription>
                         <div className="flex gap-2">
                             <Button onClick={handleSave} disabled={!isEditing}>Guardar</Button>

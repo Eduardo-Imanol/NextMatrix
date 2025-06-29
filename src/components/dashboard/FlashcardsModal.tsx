@@ -1,42 +1,43 @@
+// @/components/dashboard/FlashcardsModal.tsx
 "use client"
 
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { flashcardsData } from '@/lib/data';
+import { allFlashcards } from '@/lib/data';
 import { Flashcard } from './Flashcard';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import type { Phase } from '@/lib/data';
+import type { Topic } from '@/lib/data';
 
 interface FlashcardsModalProps {
-  phase: Phase | null;
+  topic: Topic | null;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
 }
 
-export function FlashcardsModal({ phase, isOpen, onOpenChange }: FlashcardsModalProps) {
+export function FlashcardsModal({ topic, isOpen, onOpenChange }: FlashcardsModalProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
 
-  const phaseFlashcards = React.useMemo(() => {
-    return phase ? flashcardsData.filter(f => f.phase === phase.phase) : [];
-  }, [phase]);
+  const topicFlashcards = React.useMemo(() => {
+    return topic ? allFlashcards.filter(f => f.topicId === topic.id) : [];
+  }, [topic]);
 
   React.useEffect(() => {
     if (isOpen) {
       setCurrentIndex(0);
       setIsFlipped(false);
     }
-  }, [isOpen]);
+  }, [isOpen, topic]);
 
-  if (!phase || phaseFlashcards.length === 0) {
+  if (!topic || topicFlashcards.length === 0) {
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Flashcards no disponibles</DialogTitle>
                 </DialogHeader>
-                <p>No hay flashcards para esta fase todavía.</p>
+                <p>No hay flashcards para este tema todavía.</p>
             </DialogContent>
         </Dialog>
     );
@@ -45,7 +46,7 @@ export function FlashcardsModal({ phase, isOpen, onOpenChange }: FlashcardsModal
   const handleNext = () => {
     setIsFlipped(false);
     setTimeout(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % phaseFlashcards.length);
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % topicFlashcards.length);
     }, 150)
   };
 
@@ -53,18 +54,18 @@ export function FlashcardsModal({ phase, isOpen, onOpenChange }: FlashcardsModal
     setIsFlipped(false);
     setTimeout(() => {
         setCurrentIndex((prevIndex) =>
-            prevIndex === 0 ? phaseFlashcards.length - 1 : prevIndex - 1
+            prevIndex === 0 ? topicFlashcards.length - 1 : prevIndex - 1
         );
     }, 150)
   };
 
-  const currentFlashcard = phaseFlashcards[currentIndex];
+  const currentFlashcard = topicFlashcards[currentIndex];
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Flashcards: {phase.name}</DialogTitle>
+          <DialogTitle>Flashcards: {topic.name}</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col items-center justify-center space-y-8 pt-4">
           <Flashcard 
@@ -74,13 +75,13 @@ export function FlashcardsModal({ phase, isOpen, onOpenChange }: FlashcardsModal
             setIsFlipped={setIsFlipped}
           />
           <div className="flex items-center gap-4">
-            <Button onClick={handlePrev} variant="outline" size="lg" disabled={phaseFlashcards.length <= 1}>
+            <Button onClick={handlePrev} variant="outline" size="lg" disabled={topicFlashcards.length <= 1}>
               <ArrowLeft className="mr-2 h-4 w-4" /> Anterior
             </Button>
             <span className="text-muted-foreground">
-              {currentIndex + 1} / {phaseFlashcards.length}
+              {currentIndex + 1} / {topicFlashcards.length}
             </span>
-            <Button onClick={handleNext} variant="outline" size="lg" disabled={phaseFlashcards.length <= 1}>
+            <Button onClick={handleNext} variant="outline" size="lg" disabled={topicFlashcards.length <= 1}>
               Siguiente <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
