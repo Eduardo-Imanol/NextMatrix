@@ -39,9 +39,13 @@ export function NotesModal({ phase, note, onNoteChange, isOpen, onOpenChange }: 
 
     useEffect(() => {
         if (isOpen) {
+            // When the modal opens for a new phase, decide the initial editing state.
+            // If the note is empty, start in edit mode. Otherwise, start in view mode.
+            // This now only depends on the modal being opened for a specific phase,
+            // and won't re-evaluate on every keystroke.
             setIsEditing(note.length === 0);
         }
-    }, [isOpen, note]);
+    }, [isOpen, phase]);
     
     const handleSave = () => {
         toast({
