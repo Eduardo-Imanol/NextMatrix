@@ -13,7 +13,7 @@ export type Topic = {
 };
 
 export type Phase = {
-  name: string;
+  name:string;
   phase: number;
   Icon: LucideIcon;
   description: string;
@@ -93,12 +93,30 @@ export const flashcardsData = [
   },
   {
     id: 2,
-    question: '¿Para qué sirve `getStaticProps`?',
-    answer: '`getStaticProps` es una función de Next.js que se ejecuta en tiempo de compilación para pre-renderizar una página con datos. Es ideal para contenido que no cambia con frecuencia, como un post de blog.',
-    phase: 3,
+    question: '¿Qué diferencia hay entre `let`, `const` y `var`?',
+    answer: '`var` tiene scope de función, mientras que `let` y `const` tienen scope de bloque. `const` no puede ser reasignada.',
+    phase: 1,
   },
   {
     id: 3,
+    question: '¿Qué es el Pages Router?',
+    answer: 'Es el sistema de enrutamiento basado en ficheros de Next.js. Cada fichero en la carpeta `pages` se convierte en una ruta.',
+    phase: 2,
+  },
+  {
+    id: 4,
+    question: '¿Para qué sirve `getStaticProps`?',
+    answer: 'Es una función de Next.js que se ejecuta en tiempo de compilación para pre-renderizar una página con datos. Es ideal para contenido que no cambia con frecuencia, como un post de blog.',
+    phase: 3,
+  },
+  {
+    id: 5,
+    question: '¿Qué es NextAuth.js?',
+    answer: 'Es una librería completa de autenticación para aplicaciones Next.js. Soporta múltiples proveedores (Google, GitHub, etc.) y estrategias.',
+    phase: 4,
+  },
+  {
+    id: 6,
     question: '¿Qué son los Server Components?',
     answer: 'Son componentes de React que se renderizan exclusivamente en el servidor. No envían JavaScript al cliente, lo que reduce el tamaño del bundle y mejora el rendimiento. Introducidos en el App Router de Next.js 13.',
     phase: 5,
@@ -109,11 +127,61 @@ export const quizData = [
     {
         question: "¿Qué hook de React se utiliza para manejar el estado local de un componente?",
         options: ["useEffect", "useState", "useContext", "useReducer"],
-        correctAnswer: "useState"
+        correctAnswer: "useState",
+        phase: 1
+    },
+    {
+        question: "En CSS, ¿qué propiedad convierte un contenedor en un contexto de Flexbox?",
+        options: ["display: grid;", "display: flex;", "display: block;", "flex-direction: row;"],
+        correctAnswer: "display: flex;",
+        phase: 1
     },
     {
         question: "En Next.js, ¿qué método de renderizado genera el HTML en el servidor en cada petición?",
         options: ["Static Site Generation (SSG)", "Client-Side Rendering (CSR)", "Server-Side Rendering (SSR)", "Incremental Static Regeneration (ISR)"],
-        correctAnswer: "Server-Side Rendering (SSR)"
+        correctAnswer: "Server-Side Rendering (SSR)",
+        phase: 2
+    },
+    {
+        question: "Para la navegación en Next.js, ¿qué componente se utiliza para enlaces del lado del cliente?",
+        options: ["<a>", "<Link>", "<Route>", "<Navigate>"],
+        correctAnswer: "<Link>",
+        phase: 2
+    },
+     {
+        question: "¿Qué función se utiliza para obtener datos en el lado del servidor para cada solicitud en el Pages Router?",
+        options: ["getStaticProps", "getServerSideProps", "getInitialProps", "fetchData"],
+        correctAnswer: "getServerSideProps",
+        phase: 3
+    },
+    {
+        question: "¿Qué son las API Routes en Next.js?",
+        options: ["Una forma de definir rutas de React", "Endpoints de backend sin servidor que se pueden construir dentro de la app", "Un reemplazo para `fetch`", "Un archivo de configuración"],
+        correctAnswer: "Endpoints de backend sin servidor que se pueden construir dentro de la app",
+        phase: 3
+    },
+    {
+        question: "¿Para qué sirve el componente `next/image`?",
+        options: ["Para mostrar GIFs", "Para optimizar imágenes automáticamente (tamaño, formato, lazy loading)", "Para crear galerías de imágenes", "Para aplicar filtros CSS a las imágenes"],
+        correctAnswer: "Para optimizar imágenes automáticamente (tamaño, formato, lazy loading)",
+        phase: 4
+    },
+    {
+        question: "¿Qué es el Middleware en Next.js?",
+        options: ["Un componente de React", "Una función que se ejecuta antes de que se complete una solicitud", "Una librería de manejo de estado", "Un plugin de Babel"],
+        correctAnswer: "Una función que se ejecuta antes de que se complete una solicitud",
+        phase: 4
+    },
+    {
+        question: "En el App Router, ¿cómo se crea un layout que se comparte entre varias rutas?",
+        options: ["Creando un archivo `_layout.tsx`", "Creando un archivo `layout.tsx` en una carpeta", "Usando un HOC (Higher-Order Component)", "Configurándolo en `next.config.js`"],
+        correctAnswer: "Creando un archivo `layout.tsx` en una carpeta",
+        phase: 5
+    },
+    {
+        question: "¿Qué son las Server Actions?",
+        options: ["Funciones que solo se ejecutan en el cliente", "Funciones asíncronas que se ejecutan en el servidor, diseñadas para mutaciones de datos", "Eventos personalizados de React", "Una forma de escribir CSS en JS"],
+        correctAnswer: "Funciones asíncronas que se ejecutan en el servidor, diseñadas para mutaciones de datos",
+        phase: 5
     }
 ];

@@ -1,25 +1,19 @@
 "use client"
 
 import React, { useState } from 'react';
-import { BookOpen, LayoutDashboard, Lightbulb, NotebookText, Swords, Code, Terminal, Menu, X } from 'lucide-react';
+import { BookOpen, LayoutDashboard, Terminal, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { RoadmapView } from './RoadmapView';
-import { FlashcardsView } from './FlashcardsView';
-import { QuizzesView } from './QuizzesView';
-import { NotesView } from './NotesView';
 import { ProgressView } from './ProgressView';
 import { cn } from '@/lib/utils';
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
 
-type View = 'roadmap' | 'flashcards' | 'quizzes' | 'notes' | 'progress';
+type View = 'roadmap' | 'progress';
 
 const navItems = [
   { id: 'roadmap', label: 'Roadmap', icon: BookOpen },
-  { id: 'flashcards', label: 'Flashcards', icon: Lightbulb },
-  { id: 'quizzes', label: 'Exámenes', icon: Swords },
-  { id: 'notes', label: 'Notas', icon: NotebookText },
   { id: 'progress', label: 'Progreso', icon: LayoutDashboard },
 ];
 
@@ -31,12 +25,6 @@ export function Dashboard() {
     switch (activeView) {
       case 'roadmap':
         return <RoadmapView />;
-      case 'flashcards':
-        return <FlashcardsView />;
-      case 'quizzes':
-        return <QuizzesView />;
-      case 'notes':
-        return <NotesView />;
       case 'progress':
         return <ProgressView />;
       default:
