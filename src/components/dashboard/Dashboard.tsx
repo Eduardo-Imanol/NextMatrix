@@ -10,7 +10,7 @@ import { QuizzesView } from './QuizzesView';
 import { NotesView } from './NotesView';
 import { ProgressView } from './ProgressView';
 import { cn } from '@/lib/utils';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
 
 type View = 'roadmap' | 'flashcards' | 'quizzes' | 'notes' | 'progress';
@@ -98,6 +98,8 @@ export function Dashboard() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-72 p-0">
+              <SheetTitle className="sr-only">Menu</SheetTitle>
+              <SheetDescription className="sr-only">Use the links below to navigate the application.</SheetDescription>
               <NavContent />
             </SheetContent>
           </Sheet>
