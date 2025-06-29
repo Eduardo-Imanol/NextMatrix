@@ -58,8 +58,10 @@ export function NotesModal({ phase, note, onNoteChange, isOpen, onOpenChange }: 
             <DialogContent className="max-w-3xl">
                 <DialogHeader>
                     <DialogTitle>Notas: {phase.name}</DialogTitle>
-                    <DialogDescription className="flex justify-between items-center pt-2">
-                        <span>Tus apuntes personales para esta fase.</span>
+                    <div className="flex justify-between items-center pt-2">
+                        <DialogDescription>
+                            Tus apuntes personales para esta fase.
+                        </DialogDescription>
                         <div className="flex gap-2">
                             <Button onClick={handleSave} disabled={!isEditing}>Guardar</Button>
                             <Button variant="outline" size="icon" onClick={() => setIsEditing(!isEditing)}>
@@ -67,7 +69,7 @@ export function NotesModal({ phase, note, onNoteChange, isOpen, onOpenChange }: 
                                 <span className="sr-only">{isEditing ? "Ver" : "Editar"}</span>
                             </Button>
                         </div>
-                    </DialogDescription>
+                    </div>
                 </DialogHeader>
                 <div className="mt-4">
                     {isEditing ? (
