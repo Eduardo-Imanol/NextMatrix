@@ -78,7 +78,7 @@ export const roadmapData: Phase[] = [
     name: 'Fase 1: Fundamentos Web',
     phase: 1,
     Icon: FileCode2,
-    description: 'Comienza tu viaje aprendiendo los pilares de la web: HTML para la estructura, CSS para el estilo y JavaScript para la interactividad.',
+    description: 'Comienza tu viaje aprendiendo los pilares de la web: HTML, CSS, JavaScript y React.',
     modules: [
       {
         id: 'html-basics',
@@ -163,64 +163,56 @@ export const roadmapData: Phase[] = [
             { id: 'js-extras', name: 'Extras y Buenas Prácticas', description: 'Conceptos adicionales como JSON, desestructuración y más.', Icon: Puzzle },
         ]
       },
+      {
+        id: 'react-intro',
+        name: 'Introducción a React y JSX',
+        description: 'Comprende qué es React, su ecosistema y la sintaxis JSX para definir componentes.',
+        topics: [
+            { id: 'react-basics', name: 'React Básico', description: '¿Qué es React? Virtual DOM, componentes y estado.', Icon: ToyBrick },
+            { id: 'react-jsx', name: 'JSX', description: 'Escribe HTML en JavaScript y renderiza elementos dinámicamente.', Icon: Code },
+        ],
+    },
+    {
+        id: 'react-components',
+        name: 'Componentes, Props y State',
+        description: 'Domina la creación de componentes funcionales y cómo gestionan sus datos internos y externos.',
+        topics: [
+            { id: 'react-functional-components', name: 'Componentes Funcionales', description: 'La unidad de construcción principal en React moderno.', Icon: Puzzle },
+            { id: 'react-props-state', name: 'Props y State', description: 'Cómo los componentes reciben datos y gestionan su propio estado.', Icon: Box },
+        ],
+    },
+    {
+        id: 'react-interaction',
+        name: 'Manejo de Eventos y Formularios',
+        description: 'Crea interactividad respondiendo a las acciones del usuario y manejando formularios controlados.',
+        topics: [
+            { id: 'react-events-forms', name: 'Eventos y Formularios', description: 'Captura clics, cambios en inputs y envíos de formularios.', Icon: MousePointerClick },
+        ],
+    },
+    {
+        id: 'react-hooks',
+        name: 'Hooks Esenciales y Renderizado',
+        description: 'Aprende a usar los hooks más importantes para añadir estado, efectos y renderizar listas y condicionales.',
+        topics: [
+            { id: 'react-basic-hooks', name: 'Hooks Básicos (useState, useEffect)', description: 'Añade estado y efectos secundarios a tus componentes.', Icon: FunctionSquare },
+            { id: 'react-conditional-rendering', name: 'Renderizado Condicional y Listas', description: 'Muestra elementos dinámicamente y mapea arrays a componentes.', Icon: List },
+        ],
+    },
+    {
+        id: 'react-advanced-concepts',
+        name: 'Ciclo de Vida y Buenas Prácticas',
+        description: 'Entiende el ciclo de vida de los componentes a través de hooks y aprende a escribir código limpio y eficiente.',
+        topics: [
+            { id: 'react-lifecycle', name: 'Ciclo de Vida con Hooks', description: 'Simula componentDidMount, Update y Unmount.', Icon: BrainCircuit },
+            { id: 'react-best-practices', name: 'Buenas Prácticas', description: 'Evita errores comunes y escribe código mantenible.', Icon: GraduationCap },
+            { id: 'react-advanced-intro', name: 'Conceptos Avanzados', description: 'Introducción a Custom Hooks, Context y React.memo.', Icon: Rocket },
+        ],
+    },
     ]
   },
   {
-    name: 'Fase 2: Fundamentos de React',
+    name: 'Fase 2: Next.js Básico',
     phase: 2,
-    Icon: Atom,
-    description: 'Aprende a construir interfaces de usuario interactivas y reutilizables con la biblioteca más popular del mercado.',
-    modules: [
-        {
-            id: 'react-intro',
-            name: 'Introducción a React y JSX',
-            description: 'Comprende qué es React, su ecosistema y la sintaxis JSX para definir componentes.',
-            topics: [
-                { id: 'react-basics', name: 'React Básico', description: '¿Qué es React? Virtual DOM, componentes y estado.', Icon: ToyBrick },
-                { id: 'react-jsx', name: 'JSX', description: 'Escribe HTML en JavaScript y renderiza elementos dinámicamente.', Icon: Code },
-            ],
-        },
-        {
-            id: 'react-components',
-            name: 'Componentes, Props y State',
-            description: 'Domina la creación de componentes funcionales y cómo gestionan sus datos internos y externos.',
-            topics: [
-                { id: 'react-functional-components', name: 'Componentes Funcionales', description: 'La unidad de construcción principal en React moderno.', Icon: Puzzle },
-                { id: 'react-props-state', name: 'Props y State', description: 'Cómo los componentes reciben datos y gestionan su propio estado.', Icon: Box },
-            ],
-        },
-        {
-            id: 'react-interaction',
-            name: 'Manejo de Eventos y Formularios',
-            description: 'Crea interactividad respondiendo a las acciones del usuario y manejando formularios controlados.',
-            topics: [
-                { id: 'react-events-forms', name: 'Eventos y Formularios', description: 'Captura clics, cambios en inputs y envíos de formularios.', Icon: MousePointerClick },
-            ],
-        },
-        {
-            id: 'react-hooks',
-            name: 'Hooks Esenciales y Renderizado',
-            description: 'Aprende a usar los hooks más importantes para añadir estado, efectos y renderizar listas y condicionales.',
-            topics: [
-                { id: 'react-basic-hooks', name: 'Hooks Básicos (useState, useEffect)', description: 'Añade estado y efectos secundarios a tus componentes.', Icon: FunctionSquare },
-                { id: 'react-conditional-rendering', name: 'Renderizado Condicional y Listas', description: 'Muestra elementos dinámicamente y mapea arrays a componentes.', Icon: List },
-            ],
-        },
-        {
-            id: 'react-advanced-concepts',
-            name: 'Ciclo de Vida y Buenas Prácticas',
-            description: 'Entiende el ciclo de vida de los componentes a través de hooks y aprende a escribir código limpio y eficiente.',
-            topics: [
-                { id: 'react-lifecycle', name: 'Ciclo de Vida con Hooks', description: 'Simula componentDidMount, Update y Unmount.', Icon: BrainCircuit },
-                { id: 'react-best-practices', name: 'Buenas Prácticas', description: 'Evita errores comunes y escribe código mantenible.', Icon: GraduationCap },
-                { id: 'react-advanced-intro', name: 'Conceptos Avanzados', description: 'Introducción a Custom Hooks, Context y React.memo.', Icon: Rocket },
-            ],
-        },
-    ]
-  },
-  {
-    name: 'Fase 3: Next.js Básico',
-    phase: 3,
     Icon: Rocket,
     description: 'Introducción al ecosistema de Next.js y sus características principales.',
     modules: [{
@@ -236,8 +228,8 @@ export const roadmapData: Phase[] = [
     }]
   },
   {
-    name: 'Fase 4: Nivel Intermedio',
-    phase: 4,
+    name: 'Fase 3: Nivel Intermedio',
+    phase: 3,
     Icon: BrainCircuit,
     description: 'Profundizando en el manejo de datos y estado de la aplicación.',
     modules: [{
@@ -253,8 +245,8 @@ export const roadmapData: Phase[] = [
     }]
   },
   {
-    name: 'Fase 5: Nivel Avanzado',
-    phase: 5,
+    name: 'Fase 4: Nivel Avanzado',
+    phase: 4,
     Icon: GraduationCap,
     description: 'Técnicas de optimización, autenticación y arquitecturas escalables.',
     modules: [{
@@ -270,8 +262,8 @@ export const roadmapData: Phase[] = [
     }]
   },
   {
-    name: 'Fase 6: Nivel Master (Next.js 13+)',
-    phase: 6,
+    name: 'Fase 5: Nivel Master (Next.js 13+)',
+    phase: 5,
     Icon: Star,
     description: 'Dominando las últimas funcionalidades y el futuro de Next.js.',
     modules: [{
