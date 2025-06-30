@@ -15,6 +15,11 @@ import {
   LayoutTemplate,
   Smartphone,
   Sparkles,
+  FunctionSquare,
+  List,
+  Server,
+  Puzzle,
+  Code,
 } from 'lucide-react';
 import type { Flashcard as HtmlFlashcard } from './data/html-flashcards';
 import { htmlFlashcards } from './data/html-flashcards';
@@ -28,6 +33,12 @@ import type { QuizQuestion as CssQuizQuestion } from './data/css-quiz';
 import { cssQuiz } from './data/css-quiz';
 import type { PlaygroundExercise as CssPlaygroundExercise } from './data/css-playgrounds';
 import { cssPlaygrounds } from './data/css-playgrounds';
+import type { Flashcard as JsFlashcard } from './data/javascript-flashcards';
+import { javascriptFlashcards } from './data/javascript-flashcards';
+import type { QuizQuestion as JsQuizQuestion } from './data/javascript-quiz';
+import { javascriptQuiz } from './data/javascript-quiz';
+import type { PlaygroundExercise as JsPlaygroundExercise } from './data/javascript-playgrounds';
+import { javascriptPlaygrounds } from './data/javascript-playgrounds';
 
 
 export type Topic = {
@@ -52,16 +63,16 @@ export type Phase = {
   modules: Module[];
 };
 
-export type Flashcard = HtmlFlashcard | CssFlashcard;
-export type QuizQuestion = HtmlQuizQuestion | CssQuizQuestion;
-export type PlaygroundExercise = HtmlPlaygroundExercise | CssPlaygroundExercise;
+export type Flashcard = HtmlFlashcard | CssFlashcard | JsFlashcard;
+export type QuizQuestion = HtmlQuizQuestion | CssQuizQuestion | JsQuizQuestion;
+export type PlaygroundExercise = HtmlPlaygroundExercise | CssPlaygroundExercise | JsPlaygroundExercise;
 
 export const roadmapData: Phase[] = [
   {
     name: 'Fase 1: Fundamentos Web',
     phase: 1,
     Icon: FileCode2,
-    description: 'Comienza tu viaje aprendiendo los pilares de la web: HTML para la estructura y CSS para el estilo.',
+    description: 'Comienza tu viaje aprendiendo los pilares de la web: HTML para la estructura, CSS para el estilo y JavaScript para la interactividad.',
     modules: [
       {
         id: 'html-basics',
@@ -77,8 +88,8 @@ export const roadmapData: Phase[] = [
         name: 'HTML - Parte 2: Enlaces, Imágenes y Estructura',
         description: 'Domina cómo enlazar páginas, mostrar imágenes y organizar tu contenido semánticamente.',
         topics: [
-            { id: 'html-links-images', name: 'HTML: Enlaces e Imágenes', description: 'Navegación, visualización de medios y accesibilidad.', Icon: Paintbrush },
-            { id: 'html-structure-semantics', name: 'HTML: Estructura Semántica Avanzada', description: 'Layouts con <header>, <main>, <article>, etc.', Icon: Atom },
+            { id: 'html-links-images', name: 'HTML: Enlaces e Imágenes', description: 'Navegación, visualización de medios y accesibilidad.', Icon: Rocket },
+            { id: 'html-structure-semantics', name: 'HTML: Estructura Semántica Avanzada', description: 'Layouts con <header>, <main>, <article>, etc.', Icon: LayoutTemplate },
         ]
       },
       {
@@ -87,7 +98,7 @@ export const roadmapData: Phase[] = [
         description: 'Aprende a crear formularios interactivos y a incrustar contenido multimedia.',
         topics: [
             { id: 'html-forms', name: 'HTML: Formularios Interactivos', description: 'Captura de datos de usuario con inputs, selects y botones.', Icon: TerminalSquare },
-            { id: 'html-media-other', name: 'HTML: Multimedia y Contenido Incrustado', description: 'Integración de audio, video e iframes.', Icon: Atom },
+            { id: 'html-media-other', name: 'HTML: Multimedia y Contenido Incrustado', description: 'Integración de audio, video e iframes.', Icon: Smartphone },
         ]
       },
       {
@@ -117,7 +128,35 @@ export const roadmapData: Phase[] = [
             { id: 'css-responsive', name: 'CSS: Diseño Responsivo', description: 'Adapta tu web a diferentes tamaños de pantalla con Media Queries.', Icon: Smartphone },
             { id: 'css-effects', name: 'CSS: Efectos y Transiciones', description: 'Añade vida a tu sitio con animaciones y filtros.', Icon: Sparkles },
         ]
-      }
+      },
+      {
+        id: 'js-basics',
+        name: 'JavaScript - Parte 1: Fundamentos y Lógica',
+        description: 'Aprende las bases de la programación con JavaScript, desde variables hasta control de flujo.',
+        topics: [
+            { id: 'js-fundamentals', name: 'JS: Fundamentos y Sintaxis', description: 'Variables, tipos de datos y operadores básicos.', Icon: Code },
+            { id: 'js-operators', name: 'JS: Control de Flujo y Operadores', description: 'Condicionales (if, switch) y bucles (for, while).', Icon: BrainCircuit },
+        ]
+      },
+      {
+        id: 'js-intermediate',
+        name: 'JavaScript - Parte 2: Funciones, Arrays y Objetos',
+        description: 'Organiza tu código con funciones y maneja colecciones de datos.',
+        topics: [
+            { id: 'js-functions', name: 'JS: Funciones', description: 'Declaración, arrow functions, callbacks y más.', Icon: FunctionSquare },
+            { id: 'js-objects-arrays', name: 'JS: Objetos y Arrays', description: 'Manipulación de las estructuras de datos más importantes.', Icon: List },
+        ]
+      },
+      {
+        id: 'js-advanced',
+        name: 'JavaScript - Parte 3: DOM y Asincronía',
+        description: 'Haz tus páginas interactivas manipulando el HTML y manejando operaciones asíncronas.',
+        topics: [
+            { id: 'js-dom-events', name: 'JS: DOM y Eventos', description: 'Manipula elementos HTML y responde a la interacción del usuario.', Icon: MousePointerClick },
+            { id: 'js-async', name: 'JS: Asincronía', description: 'Entiende Promesas y async/await para manejar tareas no bloqueantes.', Icon: Server },
+            { id: 'js-extras', name: 'JS: Extras y Buenas Prácticas', description: 'Conceptos adicionales como JSON, desestructuración y más.', Icon: Puzzle },
+        ]
+      },
     ]
   },
   {
@@ -193,8 +232,8 @@ export const roadmapData: Phase[] = [
 
 
 // Combine all data sources
-export const allFlashcards: Flashcard[] = [...htmlFlashcards, ...cssFlashcards];
-export const allQuizQuestions: QuizQuestion[] = [...htmlQuiz, ...cssQuiz];
-export const allPlaygrounds: PlaygroundExercise[] = [...htmlPlaygrounds, ...cssPlaygrounds];
+export const allFlashcards: Flashcard[] = [...htmlFlashcards, ...cssFlashcards, ...javascriptFlashcards];
+export const allQuizQuestions: QuizQuestion[] = [...htmlQuiz, ...cssQuiz, ...javascriptQuiz];
+export const allPlaygrounds: PlaygroundExercise[] = [...htmlPlaygrounds, ...cssPlaygrounds, ...javascriptPlaygrounds];
 
 export { Badge } from '@/components/ui/badge';
