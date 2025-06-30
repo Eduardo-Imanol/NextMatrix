@@ -18,6 +18,9 @@ import { NotesModal } from './NotesModal';
 import { useToast } from '@/hooks/use-toast';
 import { PlaygroundModal } from './PlaygroundModal';
 import { cn } from '@/lib/utils';
+import { Progress } from "@/components/ui/progress";
+import { Badge } from '@/components/ui/badge';
+
 
 const defaultNotes : Record<string, string> = {
     'html-fundamentals': `# Mis notas sobre Fundamentos de HTML
@@ -31,6 +34,7 @@ const defaultNotes : Record<string, string> = {
 export function RoadmapView() {
   const [unlockedPhases, setUnlockedPhases] = useState<Set<number>>(() => new Set([1]));
   const [unlockedModules, setUnlockedModules] = useState<Set<string>>(() => new Set(['html-basics']));
+  const [completedTopics, setCompletedTopics] = useState<Set<string>>(() => new Set());
   const [activeModal, setActiveModal] = useState<{type: 'quiz' | 'flashcards' | 'notes' | 'playground' | null, topic: Topic | null, phase: Phase | null, module: Module | null}>({ type: null, topic: null, phase: null, module: null });
   const [notes, setNotes] = useState<Record<string, string>>(defaultNotes);
   const { toast } = useToast();
@@ -123,6 +127,10 @@ export function RoadmapView() {
                 {phase.modules.map((module) => {
                     const isUnlocked = unlockedModules.has(module.id);
                     const isCompleted = isModuleCompleted(module.id, phase);
+
+                    const completedTopicsInModule = module.topics.filter(t => completedTopics.has(t.id)).length;
+                    const totalTopicsInModule = module.topics.length;
+                    const moduleProgress = totalTopicsInModule > 0 ? (completedTopicsInModule / totalTopicsInModule) * 100 : 0;
                     
                     return (
                         <Card key={module.id} className={cn("transition-all", !isUnlocked && "bg-muted/50 border-dashed opacity-60")}>
@@ -134,41 +142,57 @@ export function RoadmapView() {
                                     </div>
                                </div>
                                <CardDescription>{module.description}</CardDescription>
+                                {isUnlocked && totalTopicsInModule > 0 && (
+                                <div className="pt-4">
+                                    <div className="flex justify-between items-center mb-2">
+                                        <span className="text-sm text-muted-foreground">Progreso del Módulo</span>
+                                        <span className="text-sm font-semibold">{completedTopicsInModule} / {totalTopicsInModule} Temas</span>
+                                    </div>
+                                    <Progress value={moduleProgress} className="h-2" />
+                                </div>
+                                )}
                             </CardHeader>
                             {isUnlocked && (
                                 <>
                                 <CardContent className="flex flex-col gap-4">
-                                {module.topics.map((topic) => (
-                                <Card key={topic.id} className="overflow-hidden bg-background/50">
-                                    <CardHeader>
-                                    <div className="flex items-center gap-3">
-                                        <topic.Icon className="h-6 w-6 text-accent"/>
-                                        <CardTitle className="text-base font-medium">{topic.name}</CardTitle>
-                                    </div>
-                                    <CardDescription className="pt-2">{topic.description}</CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="flex flex-wrap gap-3">
-                                    {allFlashcards.some(f => f.topicId === topic.id) && (
-                                        <Button variant="outline" size="sm" onClick={() => setActiveModal({ type: 'flashcards', topic, phase: null, module: null })}>
-                                        <Lightbulb className="mr-2 h-4 w-4" /> Estudiar Flashcards
-                                        </Button>
-                                    )}
-                                    {allPlaygrounds.some(p => p.topicId === topic.id) && (
-                                        <Button variant="outline" size="sm" onClick={() => setActiveModal({ type: 'playground', topic, phase: null, module: null })}>
-                                        <Hammer className="mr-2 h-4 w-4" /> Practicar
-                                        </Button>
-                                    )}
-                                    <Button variant="outline" size="sm" onClick={() => setActiveModal({ type: 'notes', topic, phase: null, module: null })}>
-                                        <NotebookText className="mr-2 h-4 w-4" /> Mis Notas
-                                    </Button>
-                                    {allQuizQuestions.some(q => q.topicId === topic.id) && (
-                                        <Button variant="outline" size="sm" onClick={() => setActiveModal({ type: 'quiz', topic, phase: null, module: null })}>
-                                        <Swords className="mr-2 h-4 w-4" /> Examen del Tema
-                                        </Button>
-                                    )}
-                                    </CardContent>
-                                </Card>
-                                ))}
+                                {module.topics.map((topic) => {
+                                    const isTopicCompleted = completedTopics.has(topic.id);
+                                    return (
+                                        <Card key={topic.id} className={cn("overflow-hidden bg-background/50", isTopicCompleted && "border-green-500/50")}>
+                                            <CardHeader>
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-3">
+                                                    <topic.Icon className="h-6 w-6 text-accent"/>
+                                                    <CardTitle className="text-base font-medium">{topic.name}</CardTitle>
+                                                </div>
+                                                {isTopicCompleted && <CheckCircle className="h-5 w-5 text-green-500" />}
+                                            </div>
+                                            <CardDescription className="pt-2">{topic.description}</CardDescription>
+                                            </CardHeader>
+                                            <CardContent className="flex flex-wrap gap-3">
+                                            {allFlashcards.some(f => f.topicId === topic.id) && (
+                                                <Button variant="outline" size="sm" onClick={() => setActiveModal({ type: 'flashcards', topic, phase: null, module: null })}>
+                                                <Lightbulb className="mr-2 h-4 w-4" /> Estudiar Flashcards
+                                                </Button>
+                                            )}
+                                            {allPlaygrounds.some(p => p.topicId === topic.id) && (
+                                                <Button variant="outline" size="sm" onClick={() => setActiveModal({ type: 'playground', topic, phase: null, module: null })}>
+                                                <Hammer className="mr-2 h-4 w-4" /> Practicar
+                                                </Button>
+                                            )}
+                                            <Button variant="outline" size="sm" onClick={() => setActiveModal({ type: 'notes', topic, phase: null, module: null })}>
+                                                <NotebookText className="mr-2 h-4 w-4" /> Mis Notas
+                                            </Button>
+                                            {allQuizQuestions.some(q => q.topicId === topic.id) && (
+                                                <Button variant="outline" size="sm" onClick={() => setActiveModal({ type: 'quiz', topic, phase: null, module: null })} disabled={isTopicCompleted}>
+                                                    <Swords className="mr-2 h-4 w-4" /> 
+                                                    {isTopicCompleted ? 'Examen Completado' : 'Examen del Tema'}
+                                                </Button>
+                                            )}
+                                            </CardContent>
+                                        </Card>
+                                    )
+                                })}
                             </CardContent>
                             <CardFooter>
                                 {!isCompleted && (
@@ -228,8 +252,14 @@ export function RoadmapView() {
                 handlePhaseQuizComplete(passed, activeModal.phase.phase);
             } else if (activeModal.module) {
                 handleModuleQuizComplete(passed);
-            } else {
-                // Topic quiz, maybe update some state here in the future
+            } else if (activeModal.topic) {
+                if (passed) {
+                    setCompletedTopics(prev => new Set(prev).add(activeModal.topic!.id));
+                    toast({
+                        title: "¡Tema dominado!",
+                        description: "Has aprobado el examen de este tema. ¡Sigue así!",
+                    });
+                }
                 setActiveModal({ type: null, topic: null, phase: null, module: null });
             }
         }}
