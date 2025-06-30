@@ -9,13 +9,25 @@ import {
   Paintbrush,
   TerminalSquare,
   ToyBrick,
+  Pipette,
+  MousePointerClick,
+  Box,
+  LayoutTemplate,
+  Smartphone,
+  Sparkles,
 } from 'lucide-react';
-import type { Flashcard } from './data/html-flashcards';
+import type { Flashcard as HtmlFlashcard } from './data/html-flashcards';
 import { htmlFlashcards } from './data/html-flashcards';
-import type { QuizQuestion } from './data/html-quiz';
+import type { QuizQuestion as HtmlQuizQuestion } from './data/html-quiz';
 import { htmlQuiz } from './data/html-quiz';
-import type { PlaygroundExercise } from './data/html-playgrounds';
+import type { PlaygroundExercise as HtmlPlaygroundExercise } from './data/html-playgrounds';
 import { htmlPlaygrounds } from './data/html-playgrounds';
+import type { Flashcard as CssFlashcard } from './data/css-flashcards';
+import { cssFlashcards } from './data/css-flashcards';
+import type { QuizQuestion as CssQuizQuestion } from './data/css-quiz';
+import { cssQuiz } from './data/css-quiz';
+import type { PlaygroundExercise as CssPlaygroundExercise } from './data/css-playgrounds';
+import { cssPlaygrounds } from './data/css-playgrounds';
 
 
 export type Topic = {
@@ -33,19 +45,30 @@ export type Phase = {
   topics: Topic[];
 };
 
+export type Flashcard = HtmlFlashcard | CssFlashcard;
+export type QuizQuestion = HtmlQuizQuestion | CssQuizQuestion;
+export type PlaygroundExercise = HtmlPlaygroundExercise | CssPlaygroundExercise;
+
 export const roadmapData: Phase[] = [
   {
-    name: 'Fase 1: Fundamentos de HTML',
+    name: 'Fase 1: Fundamentos Web',
     phase: 1,
     Icon: FileCode2,
-    description: 'Aprende a estructurar contenido con el lenguaje fundamental de la web, desde lo básico hasta multimedia y formularios.',
+    description: 'Comienza tu viaje aprendiendo los pilares de la web: HTML para la estructura y CSS para el estilo.',
     topics: [
-      { id: 'html-fundamentals', name: 'Fundamentos y Estructura', description: 'Estructura básica, etiquetas principales y semántica.', Icon: ToyBrick },
-      { id: 'html-text-formatting', name: 'Texto y Formato', description: 'Títulos, párrafos, listas, y formato de texto.', Icon: Paintbrush },
-      { id: 'html-links-images', name: 'Enlaces e Imágenes', description: 'Navegación, visualización de medios y accesibilidad.', Icon: Paintbrush },
-      { id: 'html-structure-semantics', name: 'Estructura Semántica Avanzada', description: 'Layouts con <header>, <main>, <article>, etc.', Icon: Atom },
-      { id: 'html-forms', name: 'Formularios Interactivos', description: 'Captura de datos de usuario con inputs, selects y botones.', Icon: TerminalSquare },
-      { id: 'html-media-other', name: 'Multimedia y Contenido Incrustado', description: 'Integración de audio, video e iframes.', Icon: Atom },
+      { id: 'html-fundamentals', name: 'HTML: Fundamentos y Estructura', description: 'Estructura básica, etiquetas principales y semántica.', Icon: ToyBrick },
+      { id: 'html-text-formatting', name: 'HTML: Texto y Formato', description: 'Títulos, párrafos, listas, y formato de texto.', Icon: Paintbrush },
+      { id: 'html-links-images', name: 'HTML: Enlaces e Imágenes', description: 'Navegación, visualización de medios y accesibilidad.', Icon: Paintbrush },
+      { id: 'html-structure-semantics', name: 'HTML: Estructura Semántica Avanzada', description: 'Layouts con <header>, <main>, <article>, etc.', Icon: Atom },
+      { id: 'html-forms', name: 'HTML: Formularios Interactivos', description: 'Captura de datos de usuario con inputs, selects y botones.', Icon: TerminalSquare },
+      { id: 'html-media-other', name: 'HTML: Multimedia y Contenido Incrustado', description: 'Integración de audio, video e iframes.', Icon: Atom },
+      { id: 'css-fundamentals', name: 'CSS: Fundamentos y Sintaxis', description: 'Aprende cómo aplicar estilos a tus documentos HTML.', Icon: Pipette },
+      { id: 'css-selectors', name: 'CSS: Selectores y Especificidad', description: 'Domina cómo seleccionar elementos para aplicarles estilos.', Icon: MousePointerClick },
+      { id: 'css-properties', name: 'CSS: Propiedades de Estilo y Texto', description: 'Controla colores, fuentes, fondos y más.', Icon: Paintbrush },
+      { id: 'css-box-model', name: 'CSS: Modelo de Caja', description: 'Entiende el padding, margin y border.', Icon: Box },
+      { id: 'css-layout', name: 'CSS: Layout y Posicionamiento', description: 'Organiza tu contenido con Flexbox, Grid y posicionamiento.', Icon: LayoutTemplate },
+      { id: 'css-responsive', name: 'CSS: Diseño Responsivo', description: 'Adapta tu web a diferentes tamaños de pantalla con Media Queries.', Icon: Smartphone },
+      { id: 'css-effects', name: 'CSS: Efectos y Transiciones', description: 'Añade vida a tu sitio con animaciones y filtros.', Icon: Sparkles },
     ],
   },
   {
@@ -101,6 +124,6 @@ export const roadmapData: Phase[] = [
 
 
 // Combine all data sources
-export const allFlashcards: Flashcard[] = [...htmlFlashcards];
-export const allQuizQuestions: QuizQuestion[] = [...htmlQuiz];
-export const allPlaygrounds: PlaygroundExercise[] = [...htmlPlaygrounds];
+export const allFlashcards: Flashcard[] = [...htmlFlashcards, ...cssFlashcards];
+export const allQuizQuestions: QuizQuestion[] = [...htmlQuiz, ...cssQuiz];
+export const allPlaygrounds: PlaygroundExercise[] = [...htmlPlaygrounds, ...cssPlaygrounds];

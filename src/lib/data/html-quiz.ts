@@ -4,7 +4,7 @@ export interface QuizQuestion {
   question: string;
   options: string[];
   correctAnswer: string;
-  topicId: 'html-fundamentals' | 'html-text-formatting' | 'html-links-images' | 'html-structure-semantics' | 'html-forms-media';
+  topicId: 'html-fundamentals' | 'html-text-formatting' | 'html-links-images' | 'html-structure-semantics' | 'html-forms' | 'html-media-other';
 }
 
 export const htmlQuiz: QuizQuestion[] = [
@@ -57,14 +57,14 @@ export const htmlQuiz: QuizQuestion[] = [
   { question: '¿Cuál de estas etiquetas no es semántica?', options: ['<nav>', '<section>', '<div>', '<article>'], correctAnswer: '<div>', topicId: 'html-structure-semantics' },
 
   // Formularios y Multimedia (41-50)
-  { question: '¿Qué hace required en un input?', options: ['Elimina el input', 'Muestra texto de ayuda', 'Marca el campo como obligatorio', 'Lo oculta'], correctAnswer: 'Marca el campo como obligatorio', topicId: 'html-forms-media' },
-  { question: '¿Qué input crea una contraseña oculta?', options: ['<input type="secret">', '<input type="password">', '<input hidden>', '<password>'], correctAnswer: '<input type="password">', topicId: 'html-forms-media' },
-  { question: '¿Qué etiqueta agrupa campos de formulario?', options: ['<fieldset>', '<group>', '<wrapper>', '<div>'], correctAnswer: '<fieldset>', topicId: 'html-forms-media' },
-  { question: '¿Qué hace el atributo placeholder?', options: ['Pone texto por defecto', 'Pone fondo al input', 'Indica un ejemplo de entrada', 'Evita que se escriba'], correctAnswer: 'Indica un ejemplo de entrada', topicId: 'html-forms-media' },
-  { question: '¿Qué etiqueta crea una lista desplegable?', options: ['<options>', '<select>', '<dropdown>', '<list>'], correctAnswer: '<select>', topicId: 'html-forms-media' },
-  { question: '¿Qué tipo de input permite múltiples líneas?', options: ['<input type="text">', '<textarea>', '<input multiline>', '<text>'], correctAnswer: '<textarea>', topicId: 'html-forms-media' },
-  { question: '¿Qué etiqueta se usa para botones?', options: ['<btn>', '<click>', '<button>', '<submit>'], correctAnswer: '<button>', topicId: 'html-forms-media' },
-  { question: '¿Qué hace el atributo autoplay en <video>?', options: ['Reproduce al hacer clic', 'Muestra una imagen previa', 'Reproduce automáticamente al cargar', 'Lo detiene al cargar'], correctAnswer: 'Reproduce automáticamente al cargar', topicId: 'html-forms-media' },
-  { question: '¿Cuál etiqueta muestra un archivo de audio?', options: ['<sound>', '<audio>', '<mp3>', '<media>'], correctAnswer: '<audio>', topicId: 'html-forms-media' },
-  { question: '¿Qué atributo en <script> difiere su carga?', options: ['defer', 'delay', 'hold', 'async'], correctAnswer: 'defer', topicId: 'html-forms-media' }
+  { question: '¿Qué hace required en un input?', options: ['Elimina el input', 'Muestra texto de ayuda', 'Marca el campo como obligatorio', 'Lo oculta'], correctAnswer: 'Marca el campo como obligatorio', topicId: 'html-forms' },
+  { question: '¿Qué input crea una contraseña oculta?', options: ['<input type="secret">', '<input type="password">', '<input hidden>', '<password>'], correctAnswer: '<input type="password">', topicId: 'html-forms' },
+  { question: '¿Qué etiqueta agrupa campos de formulario?', options: ['<fieldset>', '<group>', '<wrapper>', '<div>'], correctAnswer: '<fieldset>', topicId: 'html-forms' },
+  { question: '¿Qué hace el atributo placeholder?', options: ['Pone texto por defecto', 'Pone fondo al input', 'Indica un ejemplo de entrada', 'Evita que se escriba'], correctAnswer: 'Indica un ejemplo de entrada', topicId: 'html-forms' },
+  { question: '¿Qué etiqueta crea una lista desplegable?', options: ['<options>', '<select>', '<dropdown>', '<list>'], correctAnswer: '<select>', topicId: 'html-forms' },
+  { question: '¿Qué tipo de input permite múltiples líneas?', options: ['<input type="text">', '<textarea>', '<input multiline>', '<text>'], correctAnswer: '<textarea>', topicId: 'html-forms' },
+  { question: '¿Qué etiqueta se usa para botones?', options: ['<btn>', '<click>', '<button>', '<submit>'], correctAnswer: '<button>', topicId: 'html-forms' },
+  { question: '¿Qué hace el atributo autoplay en <video>?', options: ['Reproduce al hacer clic', 'Muestra una imagen previa', 'Reproduce automáticamente al cargar', 'Lo detiene al cargar'], correctAnswer: 'Reproduce automáticamente al cargar', topicId: 'html-media-other' },
+  { question: '¿Cuál etiqueta muestra un archivo de audio?', options: ['<sound>', '<audio>', '<mp3>', '<media>'], correctAnswer: '<audio>', topicId: 'html-media-other' },
+  { question: '¿Qué atributo en <script> difiere su carga?', options: ['defer', 'delay', 'hold', 'async'], correctAnswer: 'defer', topicId: 'html-media-other' }
 ];
