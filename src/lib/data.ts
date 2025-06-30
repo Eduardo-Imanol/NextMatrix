@@ -43,6 +43,8 @@ import type { Flashcard as ReactFlashcard } from './data/react-flashcards';
 import { reactFlashcards } from './data/react-flashcards';
 import type { QuizQuestion as ReactQuizQuestion } from './data/react-quiz';
 import { reactQuiz } from './data/react-quiz';
+import type { PlaygroundExercise as ReactPlaygroundExercise } from './data/react-playgrounds';
+import { reactPlaygrounds } from './data/react-playgrounds';
 
 
 export type Topic = {
@@ -69,7 +71,7 @@ export type Phase = {
 
 export type Flashcard = HtmlFlashcard | CssFlashcard | JsFlashcard | ReactFlashcard;
 export type QuizQuestion = HtmlQuizQuestion | CssQuizQuestion | JsQuizQuestion | ReactQuizQuestion;
-export type PlaygroundExercise = HtmlPlaygroundExercise | CssPlaygroundExercise | JsPlaygroundExercise;
+export type PlaygroundExercise = HtmlPlaygroundExercise | CssPlaygroundExercise | JsPlaygroundExercise | ReactPlaygroundExercise;
 
 export const roadmapData: Phase[] = [
   {
@@ -291,6 +293,6 @@ export const roadmapData: Phase[] = [
 // Combine all data sources
 export const allFlashcards: Flashcard[] = [...htmlFlashcards, ...cssFlashcards, ...javascriptFlashcards, ...reactFlashcards];
 export const allQuizQuestions: QuizQuestion[] = [...htmlQuiz, ...cssQuiz, ...javascriptQuiz, ...reactQuiz];
-export const allPlaygrounds: PlaygroundExercise[] = [...htmlPlaygrounds, ...cssPlaygrounds, ...javascriptPlaygrounds];
+export const allPlaygrounds: PlaygroundExercise[] = [...htmlPlaygrounds, ...cssPlaygrounds, ...javascriptPlaygrounds, ...reactPlaygrounds];
 
 export { Badge } from '@/components/ui/badge';

@@ -6,8 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { allPlaygrounds, type Topic } from '@/lib/data';
-import type { PlaygroundExercise } from '@/lib/data/html-playgrounds';
-import { ArrowLeft, ArrowRight, Code, Eye } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Code, Eye, Info } from 'lucide-react';
 
 interface PlaygroundModalProps {
     topic: Topic | null;
@@ -24,6 +23,8 @@ export function PlaygroundModal({ topic, isOpen, onOpenChange }: PlaygroundModal
         return topic ? allPlaygrounds.filter(p => p.topicId === topic.id) : [];
     }, [topic]);
 
+    const isReactExercise = topic?.id.startsWith('react-');
+
     useEffect(() => {
         if (isOpen) {
             setCurrentIndex(0);
@@ -34,9 +35,11 @@ export function PlaygroundModal({ topic, isOpen, onOpenChange }: PlaygroundModal
         if (topicPlaygrounds.length > 0) {
             const currentExercise = topicPlaygrounds[currentIndex];
             setCode(currentExercise.initialCode);
-            setPreviewSrcDoc(currentExercise.initialCode);
+            if (!isReactExercise) {
+                setPreviewSrcDoc(currentExercise.initialCode);
+            }
         }
-    }, [currentIndex, topicPlaygrounds]);
+    }, [currentIndex, topicPlaygrounds, isReactExercise]);
 
     const handleRunCode = () => {
         setPreviewSrcDoc(code);
@@ -74,30 +77,41 @@ export function PlaygroundModal({ topic, isOpen, onOpenChange }: PlaygroundModal
                     <DialogTitle className="text-xl sm:text-2xl">{currentExercise.title}</DialogTitle>
                     <DialogDescription className="text-sm whitespace-pre-wrap">{currentExercise.description}</DialogDescription>
                 </DialogHeader>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 min-h-0 pt-4">
+                <div className={`grid grid-cols-1 ${!isReactExercise ? 'md:grid-cols-2' : ''} gap-4 flex-1 min-h-0 pt-4`}>
                     <div className="flex flex-col gap-2 min-h-0">
                         <h3 className="text-lg font-semibold flex items-center"><Code className="mr-2 h-5 w-5"/> Editor</h3>
                         <Textarea
                             value={code}
                             onChange={(e) => setCode(e.target.value)}
                             className="h-full flex-1 font-code text-base resize-none"
-                            placeholder="Escribe tu código HTML aquí..."
+                            placeholder="Escribe tu código aquí..."
+                            readOnly={isReactExercise}
                         />
+                         {isReactExercise && (
+                            <div className="flex items-center gap-2 p-2 mt-2 text-sm text-muted-foreground bg-muted rounded-md border">
+                                <Info className="h-5 w-5 shrink-0" />
+                                <span>El código de React es para visualización y no se puede ejecutar aquí. Cópialo para probarlo en un entorno de desarrollo.</span>
+                            </div>
+                         )}
                     </div>
-                    <div className="flex flex-col gap-2 min-h-0">
-                         <h3 className="text-lg font-semibold flex items-center"><Eye className="mr-2 h-5 w-5"/> Vista Previa</h3>
-                        <iframe
-                            srcDoc={previewSrcDoc}
-                            title="Vista Previa"
-                            sandbox="allow-scripts allow-same-origin"
-                            className="w-full h-full border rounded-md bg-white"
-                        />
-                    </div>
+                    {!isReactExercise && (
+                        <div className="flex flex-col gap-2 min-h-0">
+                             <h3 className="text-lg font-semibold flex items-center"><Eye className="mr-2 h-5 w-5"/> Vista Previa</h3>
+                            <iframe
+                                srcDoc={previewSrcDoc}
+                                title="Vista Previa"
+                                sandbox="allow-scripts allow-same-origin"
+                                className="w-full h-full border rounded-md bg-white"
+                            />
+                        </div>
+                    )}
                 </div>
                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
-                    <Button onClick={handleRunCode} className="w-full sm:w-auto">
-                        <Eye className="mr-2 h-4 w-4" /> Ejecutar y ver
-                    </Button>
+                    {!isReactExercise ? (
+                        <Button onClick={handleRunCode} className="w-full sm:w-auto">
+                            <Eye className="mr-2 h-4 w-4" /> Ejecutar y ver
+                        </Button>
+                    ) : <div /> /* Placeholder to keep alignment */}
                     <div className="flex items-center gap-4">
                         <Button onClick={handlePrev} variant="outline" size="lg" disabled={topicPlaygrounds.length <= 1}>
                             <ArrowLeft className="mr-2 h-4 w-4" /> Anterior
