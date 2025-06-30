@@ -9,17 +9,18 @@ import { Label } from '@/components/ui/label';
 import { allQuizQuestions } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import { CheckCircle, XCircle, Trophy } from 'lucide-react';
-import type { Phase, Topic } from '@/lib/data';
+import type { Phase, Topic, Module } from '@/lib/data';
 
 interface QuizModalProps {
   phase: Phase | null;
   topic: Topic | null;
+  module: Module | null;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   onQuizComplete: (passed: boolean) => void;
 }
 
-export function QuizModal({ phase, topic, isOpen, onOpenChange, onQuizComplete }: QuizModalProps) {
+export function QuizModal({ phase, topic, module, isOpen, onOpenChange, onQuizComplete }: QuizModalProps) {
     const [answers, setAnswers] = useState<Record<number, string>>({});
     const [submitted, setSubmitted] = useState(false);
     const { toast } = useToast();
@@ -28,19 +29,23 @@ export function QuizModal({ phase, topic, isOpen, onOpenChange, onQuizComplete }
         if (topic) {
             return allQuizQuestions.filter(q => q.topicId === topic.id);
         }
+        if (module) {
+            const topicIdsInModule = new Set(module.topics.map(t => t.id));
+            return allQuizQuestions.filter(q => topicIdsInModule.has(q.topicId));
+        }
         if (phase) {
-            const topicIdsInPhase = new Set(phase.topics.map(t => t.id));
+            const topicIdsInPhase = new Set(phase.modules.flatMap(m => m.topics.map(t => t.id)));
             return allQuizQuestions.filter(q => topicIdsInPhase.has(q.topicId));
         }
         return [];
-    }, [phase, topic]);
+    }, [phase, topic, module]);
 
     useEffect(() => {
         if (isOpen) {
             setAnswers({});
             setSubmitted(false);
         }
-    }, [isOpen]);
+    }, [isOpen, topic, module, phase]);
 
     const handleAnswerChange = (questionIndex: number, value: string) => {
         setAnswers(prev => ({ ...prev, [questionIndex]: value }));
@@ -52,7 +57,16 @@ export function QuizModal({ phase, topic, isOpen, onOpenChange, onQuizComplete }
             return score + (answers[index] === question.correctAnswer ? 1 : 0);
         }, 0);
     };
+    
+    const title = topic?.name || module?.name || phase?.name;
+    const description = topic
+      ? 'Demuestra tus conocimientos sobre este tema.'
+      : module
+      ? 'Supera este examen para desbloquear el siguiente módulo.'
+      : 'Demuestra tus conocimientos para desbloquear la siguiente fase.';
 
+    const passThreshold = topic ? 9 : (module ? Math.ceil(quizItems.length * 0.8) : Math.ceil(quizItems.length * 0.9));
+    
     const handleSubmit = () => {
         if (Object.keys(answers).length !== quizItems.length) {
             toast({
@@ -64,7 +78,6 @@ export function QuizModal({ phase, topic, isOpen, onOpenChange, onQuizComplete }
         }
         setSubmitted(true);
         const score = getScore();
-        const passThreshold = topic ? 9 : Math.ceil(quizItems.length * 0.9);
         const passed = score >= passThreshold;
 
         if (passed) {
@@ -83,20 +96,17 @@ export function QuizModal({ phase, topic, isOpen, onOpenChange, onQuizComplete }
         }
     };
     
-    if (!phase && !topic) return null;
+    if (!phase && !topic && !module) return null;
 
     const score = getScore();
-    const passThreshold = topic ? 9 : Math.ceil(quizItems.length * 0.9);
     const passed = score >= passThreshold;
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-2xl">
                 <DialogHeader>
-                    <DialogTitle>Examen: {topic?.name || phase?.name}</DialogTitle>
-                    <DialogDescription>
-                        {topic ? 'Demuestra tus conocimientos sobre este tema.' : 'Demuestra tus conocimientos para desbloquear la siguiente fase.'}
-                    </DialogDescription>
+                    <DialogTitle>Examen: {title}</DialogTitle>
+                    <DialogDescription>{description}</DialogDescription>
                 </DialogHeader>
                 {quizItems.length > 0 ? (
                     <>
@@ -111,8 +121,8 @@ export function QuizModal({ phase, topic, isOpen, onOpenChange, onQuizComplete }
                                                 const isSelected = answers[index] === option;
                                                 return (
                                                 <div key={option} className="flex items-center space-x-2">
-                                                    <RadioGroupItem value={option} id={`${(topic?.id || phase?.phase)}-${index}-${option}`} disabled={submitted} />
-                                                    <Label htmlFor={`${(topic?.id || phase?.phase)}-${index}-${option}`} className="flex items-center gap-2">
+                                                    <RadioGroupItem value={option} id={`${(topic?.id || module?.id || phase?.phase)}-${index}-${option}`} disabled={submitted} />
+                                                    <Label htmlFor={`${(topic?.id || module?.id || phase?.phase)}-${index}-${option}`} className="flex items-center gap-2">
                                                         {option}
                                                         {submitted && isSelected && (
                                                             isCorrect ? <CheckCircle className="text-green-500" /> : <XCircle className="text-red-500" />
@@ -143,7 +153,7 @@ export function QuizModal({ phase, topic, isOpen, onOpenChange, onQuizComplete }
                         </DialogFooter>
                     </>
                 ) : (
-                    <p className="py-8 text-center text-muted-foreground">No hay preguntas de examen para este {topic ? 'tema' : 'fase'} todavía.</p>
+                    <p className="py-8 text-center text-muted-foreground">No hay preguntas de examen para este {topic ? 'tema' : (module ? 'módulo' : 'fase')} todavía.</p>
                 )}
             </DialogContent>
         </Dialog>
