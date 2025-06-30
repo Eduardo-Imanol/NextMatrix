@@ -39,6 +39,8 @@ import type { QuizQuestion as JsQuizQuestion } from './data/javascript-quiz';
 import { javascriptQuiz } from './data/javascript-quiz';
 import type { PlaygroundExercise as JsPlaygroundExercise } from './data/javascript-playgrounds';
 import { javascriptPlaygrounds } from './data/javascript-playgrounds';
+import type { Flashcard as ReactFlashcard } from './data/react-flashcards';
+import { reactFlashcards } from './data/react-flashcards';
 
 
 export type Topic = {
@@ -63,7 +65,7 @@ export type Phase = {
   modules: Module[];
 };
 
-export type Flashcard = HtmlFlashcard | CssFlashcard | JsFlashcard;
+export type Flashcard = HtmlFlashcard | CssFlashcard | JsFlashcard | ReactFlashcard;
 export type QuizQuestion = HtmlQuizQuestion | CssQuizQuestion | JsQuizQuestion;
 export type PlaygroundExercise = HtmlPlaygroundExercise | CssPlaygroundExercise | JsPlaygroundExercise;
 
@@ -76,92 +78,145 @@ export const roadmapData: Phase[] = [
     modules: [
       {
         id: 'html-basics',
-        name: 'HTML - Parte 1: Fundamentos y Texto',
+        name: 'HTML: Fundamentos y Texto',
         description: 'Aprende la estructura básica de HTML y cómo formatear texto.',
         topics: [
-          { id: 'html-fundamentals', name: 'HTML: Fundamentos y Estructura', description: 'Estructura básica, etiquetas principales y semántica.', Icon: ToyBrick },
-          { id: 'html-text-formatting', name: 'HTML: Texto y Formato', description: 'Títulos, párrafos, listas, y formato de texto.', Icon: Paintbrush },
+          { id: 'html-fundamentals', name: 'Fundamentos y Estructura', description: 'Estructura básica, etiquetas principales y semántica.', Icon: ToyBrick },
+          { id: 'html-text-formatting', name: 'Texto y Formato', description: 'Títulos, párrafos, listas, y formato de texto.', Icon: Paintbrush },
         ]
       },
       {
         id: 'html-media',
-        name: 'HTML - Parte 2: Enlaces, Imágenes y Estructura',
+        name: 'HTML: Enlaces, Imágenes y Estructura',
         description: 'Domina cómo enlazar páginas, mostrar imágenes y organizar tu contenido semánticamente.',
         topics: [
-            { id: 'html-links-images', name: 'HTML: Enlaces e Imágenes', description: 'Navegación, visualización de medios y accesibilidad.', Icon: Rocket },
-            { id: 'html-structure-semantics', name: 'HTML: Estructura Semántica Avanzada', description: 'Layouts con <header>, <main>, <article>, etc.', Icon: LayoutTemplate },
+            { id: 'html-links-images', name: 'Enlaces e Imágenes', description: 'Navegación, visualización de medios y accesibilidad.', Icon: Rocket },
+            { id: 'html-structure-semantics', name: 'Estructura Semántica', description: 'Layouts con <header>, <main>, <article>, etc.', Icon: LayoutTemplate },
         ]
       },
       {
         id: 'html-forms-advanced',
-        name: 'HTML - Parte 3: Formularios y Multimedia',
+        name: 'HTML: Formularios y Multimedia',
         description: 'Aprende a crear formularios interactivos y a incrustar contenido multimedia.',
         topics: [
-            { id: 'html-forms', name: 'HTML: Formularios Interactivos', description: 'Captura de datos de usuario con inputs, selects y botones.', Icon: TerminalSquare },
-            { id: 'html-media-other', name: 'HTML: Multimedia y Contenido Incrustado', description: 'Integración de audio, video e iframes.', Icon: Smartphone },
+            { id: 'html-forms', name: 'Formularios Interactivos', description: 'Captura de datos de usuario con inputs, selects y botones.', Icon: TerminalSquare },
+            { id: 'html-media-other', name: 'Multimedia y Contenido Incrustado', description: 'Integración de audio, video e iframes.', Icon: Smartphone },
         ]
       },
       {
         id: 'css-basics',
-        name: 'CSS - Parte 1: Fundamentos y Selectores',
+        name: 'CSS: Fundamentos y Selectores',
         description: 'Introduce estilos a tus páginas aprendiendo lo básico de CSS y cómo seleccionar elementos.',
         topics: [
-            { id: 'css-fundamentals', name: 'CSS: Fundamentos y Sintaxis', description: 'Aprende cómo aplicar estilos a tus documentos HTML.', Icon: Pipette },
-            { id: 'css-selectors', name: 'CSS: Selectores y Especificidad', description: 'Domina cómo seleccionar elementos para aplicarles estilos.', Icon: MousePointerClick },
+            { id: 'css-fundamentals', name: 'Fundamentos y Sintaxis', description: 'Aprende cómo aplicar estilos a tus documentos HTML.', Icon: Pipette },
+            { id: 'css-selectors', name: 'Selectores y Especificidad', description: 'Domina cómo seleccionar elementos para aplicarles estilos.', Icon: MousePointerClick },
         ]
       },
       {
         id: 'css-styling',
-        name: 'CSS - Parte 2: Estilos, Box Model y Layout',
+        name: 'CSS: Estilos, Box Model y Layout',
         description: 'Controla la apariencia, el espaciado y la organización de tu contenido.',
         topics: [
-            { id: 'css-properties', name: 'CSS: Propiedades de Estilo y Texto', description: 'Controla colores, fuentes, fondos y más.', Icon: Paintbrush },
-            { id: 'css-box-model', name: 'CSS: Modelo de Caja', description: 'Entiende el padding, margin y border.', Icon: Box },
-            { id: 'css-layout', name: 'CSS: Layout y Posicionamiento', description: 'Organiza tu contenido con Flexbox, Grid y posicionamiento.', Icon: LayoutTemplate },
+            { id: 'css-properties', name: 'Propiedades de Estilo y Texto', description: 'Controla colores, fuentes, fondos y más.', Icon: Paintbrush },
+            { id: 'css-box-model', name: 'Modelo de Caja', description: 'Entiende el padding, margin y border.', Icon: Box },
+            { id: 'css-layout', name: 'Layout y Posicionamiento', description: 'Organiza tu contenido con Flexbox, Grid y posicionamiento.', Icon: LayoutTemplate },
         ]
       },
       {
         id: 'css-advanced',
-        name: 'CSS - Parte 3: Diseño Responsivo y Efectos',
+        name: 'CSS: Diseño Responsivo y Efectos',
         description: 'Adapta tus diseños a cualquier pantalla y añade animaciones para una experiencia dinámica.',
         topics: [
-            { id: 'css-responsive', name: 'CSS: Diseño Responsivo', description: 'Adapta tu web a diferentes tamaños de pantalla con Media Queries.', Icon: Smartphone },
-            { id: 'css-effects', name: 'CSS: Efectos y Transiciones', description: 'Añade vida a tu sitio con animaciones y filtros.', Icon: Sparkles },
+            { id: 'css-responsive', name: 'Diseño Responsivo', description: 'Adapta tu web a diferentes tamaños de pantalla con Media Queries.', Icon: Smartphone },
+            { id: 'css-effects', name: 'Efectos y Transiciones', description: 'Añade vida a tu sitio con animaciones y filtros.', Icon: Sparkles },
         ]
       },
       {
         id: 'js-basics',
-        name: 'JavaScript - Parte 1: Fundamentos y Lógica',
+        name: 'JavaScript: Fundamentos y Lógica',
         description: 'Aprende las bases de la programación con JavaScript, desde variables hasta control de flujo.',
         topics: [
-            { id: 'js-fundamentals', name: 'JS: Fundamentos y Sintaxis', description: 'Variables, tipos de datos y operadores básicos.', Icon: Code },
-            { id: 'js-operators', name: 'JS: Control de Flujo y Operadores', description: 'Condicionales (if, switch) y bucles (for, while).', Icon: BrainCircuit },
+            { id: 'js-fundamentals', name: 'Fundamentos y Sintaxis', description: 'Variables, tipos de datos y operadores básicos.', Icon: Code },
+            { id: 'js-operators', name: 'Control de Flujo y Operadores', description: 'Condicionales (if, switch) y bucles (for, while).', Icon: BrainCircuit },
         ]
       },
       {
         id: 'js-intermediate',
-        name: 'JavaScript - Parte 2: Funciones, Arrays y Objetos',
+        name: 'JavaScript: Funciones, Arrays y Objetos',
         description: 'Organiza tu código con funciones y maneja colecciones de datos.',
         topics: [
-            { id: 'js-functions', name: 'JS: Funciones', description: 'Declaración, arrow functions, callbacks y más.', Icon: FunctionSquare },
-            { id: 'js-objects-arrays', name: 'JS: Objetos y Arrays', description: 'Manipulación de las estructuras de datos más importantes.', Icon: List },
+            { id: 'js-functions', name: 'Funciones', description: 'Declaración, arrow functions, callbacks y más.', Icon: FunctionSquare },
+            { id: 'js-objects-arrays', name: 'Objetos y Arrays', description: 'Manipulación de las estructuras de datos más importantes.', Icon: List },
         ]
       },
       {
         id: 'js-advanced',
-        name: 'JavaScript - Parte 3: DOM y Asincronía',
+        name: 'JavaScript: DOM y Asincronía',
         description: 'Haz tus páginas interactivas manipulando el HTML y manejando operaciones asíncronas.',
         topics: [
-            { id: 'js-dom-events', name: 'JS: DOM y Eventos', description: 'Manipula elementos HTML y responde a la interacción del usuario.', Icon: MousePointerClick },
-            { id: 'js-async', name: 'JS: Asincronía', description: 'Entiende Promesas y async/await para manejar tareas no bloqueantes.', Icon: Server },
-            { id: 'js-extras', name: 'JS: Extras y Buenas Prácticas', description: 'Conceptos adicionales como JSON, desestructuración y más.', Icon: Puzzle },
+            { id: 'js-dom-events', name: 'DOM y Eventos', description: 'Manipula elementos HTML y responde a la interacción del usuario.', Icon: MousePointerClick },
+            { id: 'js-async', name: 'Asincronía', description: 'Entiende Promesas y async/await para manejar tareas no bloqueantes.', Icon: Server },
+            { id: 'js-extras', name: 'Extras y Buenas Prácticas', description: 'Conceptos adicionales como JSON, desestructuración y más.', Icon: Puzzle },
         ]
       },
     ]
   },
   {
-    name: 'Fase 2: Next.js Básico',
+    name: 'Fase 2: Fundamentos de React',
     phase: 2,
+    Icon: Atom,
+    description: 'Aprende a construir interfaces de usuario interactivas y reutilizables con la biblioteca más popular del mercado.',
+    modules: [
+        {
+            id: 'react-intro',
+            name: 'Introducción a React y JSX',
+            description: 'Comprende qué es React, su ecosistema y la sintaxis JSX para definir componentes.',
+            topics: [
+                { id: 'react-basics', name: 'React Básico', description: '¿Qué es React? Virtual DOM, componentes y estado.', Icon: ToyBrick },
+                { id: 'react-jsx', name: 'JSX', description: 'Escribe HTML en JavaScript y renderiza elementos dinámicamente.', Icon: Code },
+            ],
+        },
+        {
+            id: 'react-components',
+            name: 'Componentes, Props y State',
+            description: 'Domina la creación de componentes funcionales y cómo gestionan sus datos internos y externos.',
+            topics: [
+                { id: 'react-functional-components', name: 'Componentes Funcionales', description: 'La unidad de construcción principal en React moderno.', Icon: Puzzle },
+                { id: 'react-props-state', name: 'Props y State', description: 'Cómo los componentes reciben datos y gestionan su propio estado.', Icon: Box },
+            ],
+        },
+        {
+            id: 'react-interaction',
+            name: 'Manejo de Eventos y Formularios',
+            description: 'Crea interactividad respondiendo a las acciones del usuario y manejando formularios controlados.',
+            topics: [
+                { id: 'react-events-forms', name: 'Eventos y Formularios', description: 'Captura clics, cambios en inputs y envíos de formularios.', Icon: MousePointerClick },
+            ],
+        },
+        {
+            id: 'react-hooks',
+            name: 'Hooks Esenciales y Renderizado',
+            description: 'Aprende a usar los hooks más importantes para añadir estado, efectos y renderizar listas y condicionales.',
+            topics: [
+                { id: 'react-basic-hooks', name: 'Hooks Básicos (useState, useEffect)', description: 'Añade estado y efectos secundarios a tus componentes.', Icon: FunctionSquare },
+                { id: 'react-conditional-rendering', name: 'Renderizado Condicional y Listas', description: 'Muestra elementos dinámicamente y mapea arrays a componentes.', Icon: List },
+            ],
+        },
+        {
+            id: 'react-advanced-concepts',
+            name: 'Ciclo de Vida y Buenas Prácticas',
+            description: 'Entiende el ciclo de vida de los componentes a través de hooks y aprende a escribir código limpio y eficiente.',
+            topics: [
+                { id: 'react-lifecycle', name: 'Ciclo de Vida con Hooks', description: 'Simula componentDidMount, Update y Unmount.', Icon: BrainCircuit },
+                { id: 'react-best-practices', name: 'Buenas Prácticas', description: 'Evita errores comunes y escribe código mantenible.', Icon: GraduationCap },
+                { id: 'react-advanced-intro', name: 'Conceptos Avanzados', description: 'Introducción a Custom Hooks, Context y React.memo.', Icon: Rocket },
+            ],
+        },
+    ]
+  },
+  {
+    name: 'Fase 3: Next.js Básico',
+    phase: 3,
     Icon: Rocket,
     description: 'Introducción al ecosistema de Next.js y sus características principales.',
     modules: [{
@@ -177,8 +232,8 @@ export const roadmapData: Phase[] = [
     }]
   },
   {
-    name: 'Fase 3: Nivel Intermedio',
-    phase: 3,
+    name: 'Fase 4: Nivel Intermedio',
+    phase: 4,
     Icon: BrainCircuit,
     description: 'Profundizando en el manejo de datos y estado de la aplicación.',
     modules: [{
@@ -194,8 +249,8 @@ export const roadmapData: Phase[] = [
     }]
   },
   {
-    name: 'Fase 4: Nivel Avanzado',
-    phase: 4,
+    name: 'Fase 5: Nivel Avanzado',
+    phase: 5,
     Icon: GraduationCap,
     description: 'Técnicas de optimización, autenticación y arquitecturas escalables.',
     modules: [{
@@ -211,8 +266,8 @@ export const roadmapData: Phase[] = [
     }]
   },
   {
-    name: 'Fase 5: Nivel Master (Next.js 13+)',
-    phase: 5,
+    name: 'Fase 6: Nivel Master (Next.js 13+)',
+    phase: 6,
     Icon: Star,
     description: 'Dominando las últimas funcionalidades y el futuro de Next.js.',
     modules: [{
@@ -232,7 +287,7 @@ export const roadmapData: Phase[] = [
 
 
 // Combine all data sources
-export const allFlashcards: Flashcard[] = [...htmlFlashcards, ...cssFlashcards, ...javascriptFlashcards];
+export const allFlashcards: Flashcard[] = [...htmlFlashcards, ...cssFlashcards, ...javascriptFlashcards, ...reactFlashcards];
 export const allQuizQuestions: QuizQuestion[] = [...htmlQuiz, ...cssQuiz, ...javascriptQuiz];
 export const allPlaygrounds: PlaygroundExercise[] = [...htmlPlaygrounds, ...cssPlaygrounds, ...javascriptPlaygrounds];
 
