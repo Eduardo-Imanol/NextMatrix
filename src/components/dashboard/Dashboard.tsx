@@ -1,8 +1,9 @@
+// @/components/dashboard/Dashboard.tsx
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { BookOpen, LayoutDashboard, Menu } from 'lucide-react';
+import { BookOpen, LayoutDashboard, Menu, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { RoadmapView } from './RoadmapView';
@@ -21,6 +22,28 @@ const navItems = [
 export function Dashboard() {
   const [activeView, setActiveView] = useState<View>('roadmap');
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [installPrompt, setInstallPrompt] = useState<any>(null);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallClick = () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    installPrompt.userChoice.then(() => {
+        setInstallPrompt(null);
+    });
+  };
 
   const renderView = () => {
     switch (activeView) {
@@ -65,8 +88,20 @@ export function Dashboard() {
           </Button>
         ))}
       </nav>
-      <div className="mt-auto hidden p-4 lg:block">
-        <ThemeToggle />
+      <div className="mt-auto border-t p-4 space-y-4">
+        {installPrompt && (
+            <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={handleInstallClick}
+            >
+                <Download className="mr-3 h-5 w-5" />
+                Instalar App
+            </Button>
+        )}
+        <div className="hidden lg:block">
+            <ThemeToggle />
+        </div>
       </div>
     </div>
   );
