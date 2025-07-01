@@ -1,7 +1,8 @@
 "use client"
 
 import React, { useState } from 'react';
-import { BookOpen, LayoutDashboard, Terminal, Menu } from 'lucide-react';
+import Image from 'next/image';
+import { BookOpen, LayoutDashboard, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { RoadmapView } from './RoadmapView';
@@ -36,7 +37,7 @@ export function Dashboard() {
     <div className="flex h-full flex-col">
       <div className="flex h-20 items-center justify-between px-4 lg:px-6">
         <div className="flex items-center gap-2">
-          <Terminal className="h-8 w-8 text-primary" />
+          <Image src="/logo.png" alt="NextMatrix Logo" width={40} height={40} className="rounded-full" />
           <h1 className="text-2xl font-bold font-headline glow-text">
             NextMatrix
           </h1>
@@ -92,7 +93,7 @@ export function Dashboard() {
             </SheetContent>
           </Sheet>
            <div className="flex items-center gap-2">
-                <Terminal className="h-6 w-6 text-primary" />
+                <Image src="/logo.png" alt="NextMatrix Logo" width={32} height={32} className="rounded-full" />
                 <span className="text-xl font-bold font-headline glow-text">NextMatrix</span>
             </div>
             <div>{/* Placeholder for potential actions */}</div>
