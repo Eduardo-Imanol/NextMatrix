@@ -60,7 +60,7 @@ export function Dashboard() {
     <div className="flex h-full flex-col">
       <div className="flex h-20 items-center justify-between px-4 lg:px-6">
         <div className="flex items-center gap-2">
-          <Image src="/logo.png" alt="NextMatrix Logo" width={40} height={40} className="rounded-full" />
+          <Image src="https://placehold.co/40x40.png" alt="NextMatrix Logo" width={40} height={40} className="rounded-full" data-ai-hint="logo" />
           <h1 className="text-2xl font-bold font-headline glow-text">
             NextMatrix
           </h1>
@@ -128,7 +128,7 @@ export function Dashboard() {
             </SheetContent>
           </Sheet>
            <div className="flex items-center gap-2">
-                <Image src="/logo.png" alt="NextMatrix Logo" width={32} height={32} className="rounded-full" />
+                <Image src="https://placehold.co/32x32.png" alt="NextMatrix Logo" width={32} height={32} className="rounded-full" data-ai-hint="logo" />
                 <span className="text-xl font-bold font-headline glow-text">NextMatrix</span>
             </div>
             <div>{/* Placeholder for potential actions */}</div>
