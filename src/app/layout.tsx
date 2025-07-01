@@ -18,6 +18,8 @@ export default function RootLayout({
       <head>
         <meta name="theme-color" content="#222222" />
         <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/logo.png" type="image/png" sizes="any" />
+        <link rel="apple-touch-icon" href="/logo.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
