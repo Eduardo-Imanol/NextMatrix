@@ -6,6 +6,25 @@ import { Toaster } from '@/components/ui/toaster';
 export const metadata: Metadata = {
   title: 'NextMatrix',
   description: 'Learn Next.js in a new dimension.',
+  openGraph: {
+    title: 'NextMatrix',
+    description: 'Learn Next.js in a new dimension.',
+    images: [
+      {
+        url: '/logo.png',
+        width: 512,
+        height: 512,
+        alt: 'NextMatrix Logo',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'NextMatrix',
+    description: 'Learn Next.js in a new dimension.',
+    images: ['/logo.png'],
+  },
 };
 
 export default function RootLayout({
@@ -18,8 +37,8 @@ export default function RootLayout({
       <head>
         <meta name="theme-color" content="#222222" />
         {/* <link rel="manifest" href="/manifest.json" /> */}
-        <link rel="icon" href="https://placehold.co/64x64.png" type="image/png" sizes="any" />
-        <link rel="apple-touch-icon" href="https://placehold.co/180x180.png" />
+        <link rel="icon" href="/logo.png" type="image/png" sizes="any" />
+        <link rel="apple-touch-icon" href="/logo.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

@@ -1,3 +1,7 @@
+// Data management module for NextMatrix learning platform.
+// Handles curriculum structure, flashcards, quizzes, playgrounds, and lessons
+// for HTML, CSS, JavaScript, React, and Next.js topics.
+
 import {
   FileCode2,
   BrainCircuit,
@@ -27,26 +31,38 @@ import type { QuizQuestion as HtmlQuizQuestion } from './data/html-quiz';
 import { htmlQuiz } from './data/html-quiz';
 import type { PlaygroundExercise as HtmlPlaygroundExercise } from './data/html-playgrounds';
 import { htmlPlaygrounds } from './data/html-playgrounds';
+import type { Lesson as HtmlLesson } from './data/html-lessons';
+import { htmlLessons } from './data/html-lessons';
 import type { Flashcard as CssFlashcard } from './data/css-flashcards';
 import { cssFlashcards } from './data/css-flashcards';
 import type { QuizQuestion as CssQuizQuestion } from './data/css-quiz';
 import { cssQuiz } from './data/css-quiz';
 import type { PlaygroundExercise as CssPlaygroundExercise } from './data/css-playgrounds';
 import { cssPlaygrounds } from './data/css-playgrounds';
+import type { Lesson as CssLesson } from './data/css-lessons';
+import { cssLessons } from './data/css-lessons';
 import type { Flashcard as JsFlashcard } from './data/javascript-flashcards';
 import { javascriptFlashcards } from './data/javascript-flashcards';
 import type { QuizQuestion as JsQuizQuestion } from './data/javascript-quiz';
 import { javascriptQuiz } from './data/javascript-quiz';
 import type { PlaygroundExercise as JsPlaygroundExercise } from './data/javascript-playgrounds';
 import { javascriptPlaygrounds } from './data/javascript-playgrounds';
+import type { Lesson as JsLesson } from './data/javascript-lessons';
+import { javascriptLessons } from './data/javascript-lessons';
 import type { Flashcard as ReactFlashcard } from './data/react-flashcards';
 import { reactFlashcards } from './data/react-flashcards';
 import type { QuizQuestion as ReactQuizQuestion } from './data/react-quiz';
 import { reactQuiz } from './data/react-quiz';
 import type { PlaygroundExercise as ReactPlaygroundExercise } from './data/react-playgrounds';
 import { reactPlaygrounds } from './data/react-playgrounds';
+import type { Lesson as ReactLesson } from './data/react-lessons';
+import { reactLessons } from './data/react-lessons';
+import type { Lesson as NextLesson } from './data/nextjs-lessons';
+import { nextjsLessons } from './data/nextjs-lessons';
 
+// Core curriculum type definitions
 
+// Represents a single learning topic within a module
 export type Topic = {
   id: string;
   name: string;
@@ -54,6 +70,7 @@ export type Topic = {
   Icon: LucideIcon;
 };
 
+// Groups related topics into a learning module
 export type Module = {
   id: string;
   name: string;
@@ -61,6 +78,7 @@ export type Module = {
   topics: Topic[];
 };
 
+// Defines a learning phase containing multiple modules (e.g., Fundamentals, Advanced)
 export type Phase = {
   name:string;
   phase: number;
@@ -69,10 +87,16 @@ export type Phase = {
   modules: Module[];
 };
 
+// Unified flashcard type across all technologies
 export type Flashcard = HtmlFlashcard | CssFlashcard | JsFlashcard | ReactFlashcard;
+// Unified quiz question type across all technologies
 export type QuizQuestion = HtmlQuizQuestion | CssQuizQuestion | JsQuizQuestion | ReactQuizQuestion;
+// Unified playground exercise type across all technologies
 export type PlaygroundExercise = HtmlPlaygroundExercise | CssPlaygroundExercise | JsPlaygroundExercise | ReactPlaygroundExercise;
+// Unified lesson type across all technologies including Next.js
+export type Lesson = HtmlLesson | CssLesson | JsLesson | ReactLesson | NextLesson;
 
+// Main roadmap data structure defining the complete learning curriculum
 export const roadmapData: Phase[] = [
   {
     name: 'Fase 1: Fundamentos Web',
@@ -282,9 +306,14 @@ export const roadmapData: Phase[] = [
 ];
 
 
-// Combine all data sources
+// Combined data exports aggregating all technology-specific content
+// Merge flashcards from all technologies into a single array
 export const allFlashcards: Flashcard[] = [...htmlFlashcards, ...cssFlashcards, ...javascriptFlashcards, ...reactFlashcards];
+// Merge quiz questions from all technologies into a single array
 export const allQuizQuestions: QuizQuestion[] = [...htmlQuiz, ...cssQuiz, ...javascriptQuiz, ...reactQuiz];
+// Merge playground exercises from all technologies into a single array
 export const allPlaygrounds: PlaygroundExercise[] = [...htmlPlaygrounds, ...cssPlaygrounds, ...javascriptPlaygrounds, ...reactPlaygrounds];
+// Merge lessons from all technologies including Next.js into a single array
+export const allLessons: Lesson[] = [...htmlLessons, ...cssLessons, ...javascriptLessons, ...reactLessons, ...nextjsLessons];
 
 export { Badge } from '@/components/ui/badge';

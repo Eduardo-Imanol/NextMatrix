@@ -1,14 +1,6 @@
 import type {NextConfig} from 'next';
-import withPWA from '@ducanh2912/next-pwa';
-
-const pwaConfig = withPWA({
-  dest: 'public',
-  register: true,
-  skipWaiting: true,
-});
 
 const nextConfig: NextConfig = {
-  /* config options here */
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -16,15 +8,9 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'placehold.co',
-        port: '',
-        pathname: '/**',
-      },
-    ],
+    unoptimized: true,
   },
+  devIndicators: false,
 };
 
-export default pwaConfig(nextConfig);
+export default nextConfig;

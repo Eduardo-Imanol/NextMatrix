@@ -9,48 +9,44 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { roadmapData, type Phase, type Topic, allFlashcards, allPlaygrounds, allQuizQuestions, type Module } from "@/lib/data"
+import { roadmapData, type Phase, type Topic, allFlashcards, allPlaygrounds, allQuizQuestions, allLessons, type Module } from "@/lib/data"
 import { Button } from '@/components/ui/button';
-import { Lightbulb, NotebookText, Swords, CheckCircle, Lock, Hammer, Trophy, Rocket } from 'lucide-react';
+import { Lightbulb, NotebookText, Swords, CheckCircle, Lock, Hammer, Trophy, Rocket, BookOpen } from 'lucide-react';
 import { QuizModal } from './QuizModal';
 import { FlashcardsModal } from './FlashcardsModal';
 import { NotesModal } from './NotesModal';
+import { LessonModal } from './LessonModal';
 import { useToast } from '@/hooks/use-toast';
 import { PlaygroundModal } from './PlaygroundModal';
 import { cn } from '@/lib/utils';
 import { Progress } from "@/components/ui/progress";
 import { Badge } from '@/components/ui/badge';
+import { useLearning } from '@/contexts/LearningContext';
 
-
-const defaultNotes : Record<string, string> = {
-    'html-fundamentals': `# Mis notas sobre Fundamentos de HTML
-
-## Estructura
-- \`<!DOCTYPE html>\` es crucial.
-- \`<html>\` con atributo \`lang\`.
-- \`<head>\` para metadatos, \`<body>\` para contenido.`,
-};
 
 export function RoadmapView() {
-  const [unlockedPhases, setUnlockedPhases] = useState<Set<number>>(() => new Set([1]));
-  const [unlockedModules, setUnlockedModules] = useState<Set<string>>(() => new Set(['html-basics']));
-  const [completedTopics, setCompletedTopics] = useState<Set<string>>(() => new Set());
-  const [activeModal, setActiveModal] = useState<{type: 'quiz' | 'flashcards' | 'notes' | 'playground' | null, topic: Topic | null, phase: Phase | null, module: Module | null}>({ type: null, topic: null, phase: null, module: null });
-  const [notes, setNotes] = useState<Record<string, string>>(defaultNotes);
+  const {
+    isPhaseUnlocked,
+    isPhaseCompleted,
+    isModuleUnlocked,
+    isModuleCompleted,
+    isTopicCompleted,
+    unlockPhase,
+    unlockModule,
+    completeTopic,
+    getNote,
+    setNote,
+    recordQuizScore,
+  } = useLearning();
+
+  const [activeModal, setActiveModal] = useState<{type: 'quiz' | 'flashcards' | 'notes' | 'playground' | 'lesson' | null, topic: Topic | null, phase: Phase | null, module: Module | null}>({ type: null, topic: null, phase: null, module: null });
   const { toast } = useToast();
 
   const handlePhaseQuizComplete = (passed: boolean, phaseNumber: number) => {
       if (passed && activeModal.phase) {
           const nextPhase = phaseNumber + 1;
           if (nextPhase <= roadmapData.length) {
-              setUnlockedPhases(prev => {
-                const newSet = new Set(prev).add(nextPhase);
-                const firstModuleOfNextPhase = roadmapData.find(p => p.phase === nextPhase)?.modules[0];
-                if (firstModuleOfNextPhase) {
-                    setUnlockedModules(prevModules => new Set(prevModules).add(firstModuleOfNextPhase.id));
-                }
-                return newSet;
-              });
+              unlockPhase(nextPhase);
               toast({
                   title: '¡Fase Desbloqueada!',
                   description: `Ahora tienes acceso a la Fase ${nextPhase}.`,
@@ -67,7 +63,7 @@ export function RoadmapView() {
           const nextModule = currentPhase.modules[moduleIndex + 1];
 
           if (nextModule) {
-              setUnlockedModules(prev => new Set(prev).add(nextModule.id));
+              unlockModule(nextModule.id);
               toast({
                   title: '¡Módulo Desbloqueado!',
                   description: `Bien hecho. Ahora puedes continuar con "${nextModule.name}".`,
@@ -76,23 +72,6 @@ export function RoadmapView() {
       }
       setActiveModal({ type: null, topic: null, phase: null, module: null });
   }
-
-  const handleNoteChange = (newNote: string, topicId: string) => {
-      setNotes(prev => ({ ...prev, [topicId]: newNote }));
-  };
-
-  const isPhaseUnlocked = (phaseNumber: number) => unlockedPhases.has(phaseNumber);
-  const isPhaseCompleted = (phaseNumber: number) => unlockedPhases.has(phaseNumber + 1);
-
-  const isModuleCompleted = (moduleId: string, phase: Phase) => {
-      const moduleIndex = phase.modules.findIndex(m => m.id === moduleId);
-      const nextModule = phase.modules[moduleIndex + 1];
-      if (nextModule) {
-          return unlockedModules.has(nextModule.id);
-      }
-      // If it's the last module, it's completed if the phase is completed.
-      return isPhaseCompleted(phase.phase);
-  };
 
   return (
     <div className="space-y-8">
@@ -155,24 +134,24 @@ export function RoadmapView() {
                 
                 <div className="pl-12 space-y-4">
                   {phase.modules.map((module) => {
-                      const isModuleUnlocked = unlockedModules.has(module.id);
+                      const moduleUnlocked = isModuleUnlocked(module.id);
                       const moduleIsCompleted = isModuleCompleted(module.id, phase);
 
-                      const completedTopicsInModule = module.topics.filter(t => completedTopics.has(t.id)).length;
+                      const completedTopicsInModule = module.topics.filter(t => isTopicCompleted(t.id)).length;
                       const totalTopicsInModule = module.topics.length;
                       const moduleProgress = totalTopicsInModule > 0 ? (completedTopicsInModule / totalTopicsInModule) * 100 : 0;
                       
                       return (
-                          <Card key={module.id} className={cn("transition-all", !isModuleUnlocked && "bg-muted/50 border-dashed opacity-60")}>
+                          <Card key={module.id} className={cn("transition-all", !moduleUnlocked && "bg-muted/50 border-dashed opacity-60")}>
                               <CardHeader>
                                  <div className="flex w-full items-center justify-between">
                                       <CardTitle className="text-lg md:text-xl">{module.name}</CardTitle>
                                       <div className="flex items-center gap-2">
-                                        {moduleIsCompleted ? <Badge variant="secondary" className="border-green-500/50 text-green-500">Completado</Badge> : !isModuleUnlocked ? <Lock className="h-5 w-5 text-muted-foreground" /> : null}
+                                        {moduleIsCompleted ? <Badge variant="secondary" className="border-green-500/50 text-green-500">Completado</Badge> : !moduleUnlocked ? <Lock className="h-5 w-5 text-muted-foreground" /> : null}
                                       </div>
                                  </div>
                                  <CardDescription>{module.description}</CardDescription>
-                                  {isModuleUnlocked && totalTopicsInModule > 0 && (
+                                  {moduleUnlocked && totalTopicsInModule > 0 && (
                                   <div className="pt-4">
                                       <div className="flex justify-between items-center mb-2">
                                           <span className="text-sm text-muted-foreground">Progreso del Módulo</span>
@@ -182,24 +161,29 @@ export function RoadmapView() {
                                   </div>
                                   )}
                               </CardHeader>
-                              {isModuleUnlocked && (
+                              {moduleUnlocked && (
                                   <>
                                   <CardContent className="flex flex-col gap-4">
                                   {module.topics.map((topic) => {
-                                      const isTopicCompleted = completedTopics.has(topic.id);
+                                      const topicDone = isTopicCompleted(topic.id);
                                       return (
-                                          <Card key={topic.id} className={cn("overflow-hidden bg-background/50", isTopicCompleted && "border-green-500/50")}>
+                                          <Card key={topic.id} className={cn("overflow-hidden bg-background/50", topicDone && "border-green-500/50")}>
                                               <CardHeader>
                                               <div className="flex items-center justify-between">
                                                   <div className="flex items-center gap-3">
                                                       <topic.Icon className="h-6 w-6 text-accent"/>
                                                       <CardTitle className="text-base font-medium">{topic.name}</CardTitle>
                                                   </div>
-                                                  {isTopicCompleted && <CheckCircle className="h-5 w-5 text-green-500" />}
+                                                  {topicDone && <CheckCircle className="h-5 w-5 text-green-500" />}
                                               </div>
                                               <CardDescription className="pt-2">{topic.description}</CardDescription>
                                               </CardHeader>
                                               <CardContent className="flex flex-wrap gap-3">
+                                              {allLessons.some(l => l.topicId === topic.id) && (
+                                                  <Button variant="outline" size="sm" onClick={() => setActiveModal({ type: 'lesson', topic, phase: null, module: null })}>
+                                                  <BookOpen className="mr-2 h-4 w-4" /> Aprender
+                                                  </Button>
+                                              )}
                                               {allFlashcards.some(f => f.topicId === topic.id) && (
                                                   <Button variant="outline" size="sm" onClick={() => setActiveModal({ type: 'flashcards', topic, phase: null, module: null })}>
                                                   <Lightbulb className="mr-2 h-4 w-4" /> Estudiar Flashcards
@@ -214,9 +198,9 @@ export function RoadmapView() {
                                                   <NotebookText className="mr-2 h-4 w-4" /> Mis Notas
                                               </Button>
                                               {allQuizQuestions.some(q => q.topicId === topic.id) && (
-                                                  <Button variant="outline" size="sm" onClick={() => setActiveModal({ type: 'quiz', topic, phase: null, module: null })} disabled={isTopicCompleted}>
+                                                  <Button variant="outline" size="sm" onClick={() => setActiveModal({ type: 'quiz', topic, phase: null, module: null })} disabled={topicDone}>
                                                       <Swords className="mr-2 h-4 w-4" /> 
-                                                      {isTopicCompleted ? 'Examen Completado' : 'Examen del Tema'}
+                                                      {topicDone ? 'Examen Completado' : 'Examen del Tema'}
                                                   </Button>
                                               )}
                                               </CardContent>
@@ -268,8 +252,14 @@ export function RoadmapView() {
         isOpen={activeModal.type === 'notes'}
         onOpenChange={() => setActiveModal({ type: null, topic: null, phase: null, module: null })}
         topic={activeModal.topic}
-        note={activeModal.topic ? notes[activeModal.topic.id] ?? "" : ""}
-        onNoteChange={(newNote) => activeModal.topic && handleNoteChange(newNote, activeModal.topic.id)}
+        note={activeModal.topic ? getNote(activeModal.topic.id) : ""}
+        onNoteChange={(newNote) => activeModal.topic && setNote(activeModal.topic.id, newNote)}
+      />
+
+      <LessonModal
+        isOpen={activeModal.type === 'lesson'}
+        onOpenChange={() => setActiveModal({ type: null, topic: null, phase: null, module: null })}
+        topic={activeModal.topic}
       />
 
       <QuizModal 
@@ -278,14 +268,44 @@ export function RoadmapView() {
         phase={activeModal.phase}
         topic={activeModal.topic}
         module={activeModal.module}
-        onQuizComplete={(passed) => {
+        onQuizComplete={(passed, score, total) => {
             if (activeModal.phase) {
+                recordQuizScore({
+                  id: `phase-${activeModal.phase.phase}-${Date.now()}`,
+                  date: new Date().toISOString(),
+                  type: 'phase',
+                  targetId: `phase-${activeModal.phase.phase}`,
+                  targetName: activeModal.phase.name,
+                  score,
+                  total,
+                  passed,
+                });
                 handlePhaseQuizComplete(passed, activeModal.phase.phase);
             } else if (activeModal.module) {
+                recordQuizScore({
+                  id: `module-${activeModal.module.id}-${Date.now()}`,
+                  date: new Date().toISOString(),
+                  type: 'module',
+                  targetId: activeModal.module.id,
+                  targetName: activeModal.module.name,
+                  score,
+                  total,
+                  passed,
+                });
                 handleModuleQuizComplete(passed);
             } else if (activeModal.topic) {
+                recordQuizScore({
+                  id: `topic-${activeModal.topic.id}-${Date.now()}`,
+                  date: new Date().toISOString(),
+                  type: 'topic',
+                  targetId: activeModal.topic.id,
+                  targetName: activeModal.topic.name,
+                  score,
+                  total,
+                  passed,
+                });
                 if (passed) {
-                    setCompletedTopics(prev => new Set(prev).add(activeModal.topic!.id));
+                    completeTopic(activeModal.topic.id);
                     toast({
                         title: "¡Tema dominado!",
                         description: "Has aprobado el examen de este tema. ¡Sigue así!",
