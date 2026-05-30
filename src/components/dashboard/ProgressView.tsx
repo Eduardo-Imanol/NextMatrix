@@ -133,10 +133,10 @@ export function ProgressView() {
         <Card>
           <CardHeader>
             <CardTitle>Fases Completadas</CardTitle>
-            <CardDescription>Fases desbloqueadas.</CardDescription>
+            <CardDescription>Fases finalizadas con éxito.</CardDescription>
           </CardHeader>
           <CardContent className="flex items-center justify-center">
-            <p className="text-center text-5xl font-bold">{isPhaseUnlocked(roadmapData.length + 1) ? roadmapData.length : roadmapData.filter(p => isPhaseUnlocked(p.phase)).length} <span className="text-lg text-muted-foreground">/ {roadmapData.length}</span></p>
+            <p className="text-center text-5xl font-bold">{roadmapData.filter(p => isPhaseUnlocked(p.phase + 1)).length} <span className="text-lg text-muted-foreground">/ {roadmapData.length}</span></p>
           </CardContent>
         </Card>
       </div>
