@@ -72,12 +72,6 @@
 ### Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/NextMatrix.git
-
-# Navigate to the project
-cd NextMatrix
-
 # Install dependencies
 npm install
 
@@ -176,9 +170,7 @@ All state persists to `localStorage` automatically.
 
 ## Author
 
-**Your Name** — [your-email@example.com](mailto:your-email@example.com)
-
-Project Link: [https://github.com/your-username/NextMatrix](https://github.com/your-username/NextMatrix)
+**Eduardo Imanol**
 
 ---
 
